@@ -15,7 +15,6 @@ engine = create_engine('sqlite:///sqlite.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-
 langs = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
          'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
          'ja': 'Japanese', 'ko': 'Korean', 'lt': 'Lithuanian', 'lv': 'Latvian', 'ms': 'Malay', 'nl': 'Dutch', 'no': 'Norwegian', 'pl': 'Polish', 'pt': 'Portuguese', 'ro': 'Romanian',
@@ -35,7 +34,7 @@ class twitter_listener(StreamListener):
         try:
             json_data = json.loads(data)
             self.stats.add_lang(langs[json_data["lang"]])
-            print(self.counter, self.num_tweets_to_grab)
+            print(self.counter)
 
             self.counter += 1
             retweet_count = json_data["retweeted_status"]["retweet_count"]
@@ -63,46 +62,6 @@ class twitter_listener(StreamListener):
             return True
         except:
             # @TODO: Very dangerous, come back to this!
-            pass
-
-    def on_error(self, status):
-        print(status)
-
-
-class TwitterStream(StreamListener):
-
-    def __init__(self, num_tweets_to_grab):
-        self.auth = tweepy.OAuthHandler(cons_key, cons_sec)
-        self.auth.set_access_token(app_tok, app_sec)
-        self.counter = 0
-        self.num_tweets_to_grab = num_tweets_to_grab
-
-    def on_data(self, data):
-        try:
-            j = json.loads(data)
-            self.counter += 1
-            print(self.counter)
-            # print(json.dumps(j, indent=4, sort_keys=True))
-            print(j["text"])
-            print(j["user"]["id_str"])
-            print(j["lang"])
-            print(j["user"]["time_zone"])
-            # session = Session()
-            tweet = Tweet(
-                text = j["text"],
-                associated_user = j["user"]["id_str"],
-                lang = j["lang"],
-                time_zone = j["user"]["time_zone"],
-                recorded_at = datetime.datetime.now(),
-                occurred_at = datetime.datetime.strptime(j["created_at"], r"%a %b %d %H:%M:%S +0000 %Y")
-                )
-            # session.add(tweet)
-            # session.commit()
-            if self.counter >= self.num_tweets_to_grab:
-                return False
-
-            return True
-        except:
             pass
 
     def on_error(self, status):
@@ -184,12 +143,6 @@ if __name__ == "__main__":
     num_tweets_to_grab = 50
     retweet_count = 500
 
-    #pdb.set_trace()
+    # pdb.set_trace()
     twit = TwitterMain(num_tweets_to_grab, retweet_count)
     twit.get_streaming_data()
-    # twit.get_trends()
-    # stream = Stream(auth, TwitterStream(num_tweets_to_grab))
-    # try:
-    #     stream.sample()
-    # except Exception as e:
-    #     print(e.__doc__)

@@ -7,6 +7,9 @@ from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
+from app import db
+from app import app
+
 Base = declarative_base()
 
 class Tweet(Base):

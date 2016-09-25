@@ -1,7 +1,6 @@
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+from app import app, db
 
 @app.route("/")
 def main():
@@ -14,6 +13,3 @@ def top_tweets():
 @app.route("/trends")
 def trends():
     return render_template("trends.html")
-
-if __name__ == "__main__":
-    app.run(debug = True)
