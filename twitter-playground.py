@@ -2,14 +2,15 @@ import tweepy
 import datetime
 from tweepy.streaming import StreamListener
 from tweepy import Stream
-from local_config import *
+from config import *
 import pdb
 import json
 from collections import Counter
-# from flask_sqlalchemy import SQLAlchemy
+
+from app.models import Base, Tweet
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Tweet
 
 engine = create_engine('sqlite:///sqlite.db')
 Session = sessionmaker(bind=engine)

@@ -1,3 +1,7 @@
 # virtualenv
 .venv/
 venv/
+
+*.pyc
+
+sqlite.db
