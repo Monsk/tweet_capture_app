@@ -141,7 +141,7 @@ class stats():
 
 
 if __name__ == "__main__":
-    num_tweets_to_grab = 50
+    num_tweets_to_grab = 100
     retweet_count = 500
 
     # pdb.set_trace()
