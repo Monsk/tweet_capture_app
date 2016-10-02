@@ -1,5 +1,5 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-import twitter_listener
+import twitter-listener
 
 sched = BlockingScheduler()
 
