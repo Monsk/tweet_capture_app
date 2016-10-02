@@ -8,13 +8,14 @@ import json
 from collections import Counter
 
 from app.models import Base, Tweet
+from app import db
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///sqlite.db')
-Session = sessionmaker(bind=engine)
-session = Session()
+# engine = create_engine('sqlite:///sqlite.db')
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
 langs = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
          'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
@@ -49,8 +50,8 @@ class twitter_listener(StreamListener):
                 recorded_at = datetime.datetime.now(),
                 occurred_at = datetime.datetime.strptime(json_data["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
                 )
-            session.add(tweet)
-            session.commit()
+            db.session.add(tweet)
+            db.session.commit()
 
 
             if retweet_count >= self.retweet_count:
@@ -141,7 +142,7 @@ class stats():
 
 
 if __name__ == "__main__":
-    num_tweets_to_grab = 100
+    num_tweets_to_grab = 10
     retweet_count = 500
 
     # pdb.set_trace()
