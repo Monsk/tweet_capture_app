@@ -4,6 +4,7 @@ EasyProcess==0.1.9
 Flask==0.10.1
 flask-heroku==0.1.9
 Flask-SQLAlchemy==2.1
+flask-script-2.0.5
 gunicorn
 itsdangerous==0.24
 Jinja2==2.8
