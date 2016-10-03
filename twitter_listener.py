@@ -13,9 +13,9 @@ from app import db
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///sqlite.db')
-Session = sessionmaker(bind=engine)
-session = Session()
+# engine = create_engine('sqlite:///sqlite.db')
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
 langs = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
          'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
@@ -55,7 +55,8 @@ class twitter_listener(StreamListener):
                 db.session.add(tweet)
                 db.session.commit()
             except:
-                return "Failed to add to database."
+                print("Failed to add to database.")
+                return False
 
 
             if retweet_count >= self.retweet_count:
