@@ -1,5 +1,5 @@
 web: gunicorn app:app
-init: python db_create.py
-upgrade: python db_upgrade.py
+init: python manage.py db init
+upgrade: python manage.py db upgrade
 clock: python clock.py
-capture: python twitter_listener.py
+capture: python manage.py catch_tweets

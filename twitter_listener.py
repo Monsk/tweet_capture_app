@@ -7,7 +7,7 @@ import pdb
 import json
 from collections import Counter
 
-from app.models import Base, Tweet
+from app.models import Tweet
 from app import db
 
 from sqlalchemy import create_engine

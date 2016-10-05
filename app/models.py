@@ -10,9 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from app import db
 from app import app
 
-Base = declarative_base()
-
-class Tweet(Base):
+class Tweet(db.Model):
     """Table for storing relevent tweets"""
 
     __tablename__ = 'tweet'
