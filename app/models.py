@@ -3,24 +3,23 @@
 
 import datetime
 
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
+# from sqlalchemy.orm import relationship, backref
 
 from app import db
 from app import app
 
 class Tweet(db.Model):
-    """Table for storing relevent tweets"""
-
+    # """Table for storing relevent tweets"""
     __tablename__ = 'tweet'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    text = Column(String)
-    associated_user = Column(String)
-    lang = Column(String)
-    time_zone = Column(String)
-    recorded_at = Column(DateTime, default=datetime.datetime.now)
-    occurred_at = Column(DateTime, default=datetime.datetime.now)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    text = db.Column(db.String)
+    associated_user = db.Column(db.String)
+    lang = db.Column(db.String)
+    time_zone = db.Column(db.String)
+    geolocation = db.Column(db.String)
+    recorded_at = db.Column(db.DateTime, default=datetime.datetime.now)
+    occurred_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
     def __str__(self):
         """Return the string representation of a tweet."""
