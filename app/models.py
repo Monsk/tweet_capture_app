@@ -36,4 +36,4 @@ class Tweet(db.Model):
                 'occurred_at': str(self.occurred_at)}
 
     def __repr__(self):
-        return '<Tweet {}>'.format(self.text)
+        return '<Tweet {}>'.format(self.text.encode('utf-8'))
