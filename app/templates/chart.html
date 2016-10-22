@@ -15,18 +15,38 @@
       // draws it.
       function drawChart() {
 
-        // Create our data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Language');
-        data.addColumn('number', 'Number of tweets');
-        data.addRows([
+        // Create our timezone data table.
+        var tzoneData = new google.visualization.DataTable();
+        tzoneData.addColumn('string', 'Timezone');
+        tzoneData.addColumn('number', 'Percentage of tweets');
+        tzoneData.addRows([
                 // Instead of plugging in the values manually, or reading them
                 // from a Data Source like Google Spreadsheets, feed them in
                 // using Jinja, the templating system Flask uses.
                 // Each iteration evaluates to something like this:
                 // ['Saturday', 28],
-                {%- for location, num in data %}
+                {%- for location, num in tzoneFraction %}
                 ['{{ location }}', {{ num }}],
+                {%- endfor %}
+        ]);
+
+        var tzoneChart = new google.visualization.ColumnChart(
+                document.getElementById('tzone_chart'));
+        tzoneChart.draw(tzoneData, {legend: 'none', vAxis: {baseline: 0},
+                colors: ['#A7DBD8']});
+
+        // Create our language data table.
+        var langData = new google.visualization.DataTable();
+        langData.addColumn('string', 'Language');
+        langData.addColumn('number', 'Percentage of tweets');
+        langData.addRows([
+                // Instead of plugging in the values manually, or reading them
+                // from a Data Source like Google Spreadsheets, feed them in
+                // using Jinja, the templating system Flask uses.
+                // Each iteration evaluates to something like this:
+                // ['Saturday', 28],
+                {%- for lang, num in langFraction %}
+                ['{{ lang }}', {{ num }}],
                 {%- endfor %}
         ]);
 
@@ -34,18 +54,20 @@
         // options go into a single {}; some options' values go into a nested
         // {}. Some values, such as colors, must be given as strings.  The
         // Google Charts API is well-documented.
-        var chart = new google.visualization.ColumnChart(
-                document.getElementById('chart_div'));
-        chart.draw(data, {legend: 'none', vAxis: {baseline: 0},
+
+        var langChart = new google.visualization.ColumnChart(
+                document.getElementById('lang_chart'));
+        langChart.draw(langData, {legend: 'none', vAxis: {baseline: 0},
                 colors: ['#A7DBD8']});
       }
     </script>
 
     <style>
         #content {
-            width: 80%;
+            width: 60%;
             height: 60%;
             min-width: 800px;
+            min-height: 600px;
 
             /* Center the div. */
             margin-right: auto;
@@ -54,7 +76,7 @@
             text-align: center;
         }
 
-        #chart_div {
+        .chart {
             min-height: 400px;
         }
     </style>
@@ -63,6 +85,10 @@
     <!-- Include more content here or below the chart, using Flask / Jinja. -->
     <div id="content">
         <h1>Where are people tweeting about Brexit?</h1>
-        <div id="chart_div"></div>
+        <div id="tzone_chart" class="chart"></div>
+    </div>
+    <div id="content">
+        <h1>In what languages are people tweeting about Brexit?</h1>
+        <div id="lang_chart" class="chart"></div>
     </div>
 </body>
