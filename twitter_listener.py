@@ -6,6 +6,7 @@ from config import *
 import pdb
 import json
 from collections import Counter
+import pprint
 
 from app.models import Tweet
 from app import db
@@ -25,43 +26,54 @@ langs = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'da'
 
 class twitter_listener(StreamListener):
 
-    def __init__(self, num_tweets_to_grab, stats, get_tweet_html, retweet_count=10000):
+    def __init__(self, num_tweets_to_grab, stats, retweet_count=10000):
         self.counter = 0
         self.num_tweets_to_grab = num_tweets_to_grab
         self.retweet_count = retweet_count
         self.stats = stats
-        self.get_tweet_html = get_tweet_html
+        # self.get_tweet_html = get_tweet_html
 
     def on_data(self, data):
         try:
             json_data = json.loads(data)
-            self.stats.add_lang(langs[json_data["lang"]])
             print(self.counter)
 
+            # pprint.pprint(json_data)
+
             self.counter += 1
-            retweet_count = json_data["retweeted_status"]["retweet_count"]
-            # print(json_data["text"], retweet_count, langs[json_data["lang"]])
 
             tweet = Tweet(
+                tweet_id = json_data["id_str"],
                 text = json_data["text"],
-                associated_user = json_data["user"]["id_str"],
                 lang = json_data["lang"],
                 time_zone = json_data["user"]["time_zone"],
+                source = json_data["source"],
+                geolocation = json_data["geo"],
+                user_location = json_data["user"]["location"],
+                user_id = json_data["user"]["id_str"],
+                user_screen_name = json_data["user"]["screen_name"],
                 recorded_at = datetime.datetime.now(),
                 occurred_at = datetime.datetime.strptime(json_data["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
                 )
 
+            if "retweeted_status" in json_data:
+                # Adds retweet data if the tweet is a retweet
+                tweet.retweet_count = json_data["retweeted_status"]["retweet_count"]
+                tweet.retweet_text = json_data["retweeted_status"]["text"]
+                tweet.source_user_id = json_data["retweeted_status"]["user"]["id_str"]
+                tweet.source_user_screen_name = json_data["retweeted_status"]["user"]["screen_name"]
+
+            for element in json_data["entities"]["urls"]:
+                # @TODO: store all the urls in the list, not just the last one
+                tweet.url_link = element["expanded_url"]
+
             try:
                 db.session.add(tweet)
                 db.session.commit()
+                print("Tweet added to database.")
             except:
                 print("Failed to add to database.")
                 return False
-
-
-            if retweet_count >= self.retweet_count:
-                self.stats.add_top_tweets(self.get_tweet_html(json_data['id']))
-                self.stats.add_top_lang(langs[json_data["lang"]])
 
             if self.counter >= self.num_tweets_to_grab:
                 return False
@@ -86,7 +98,7 @@ class TwitterMain():
         self.stats = stats()
 
     def get_streaming_data(self):
-        twitter_stream = Stream(self.auth, twitter_listener(num_tweets_to_grab=self.num_tweets_to_grab, retweet_count=self.retweet_count, stats=self.stats, get_tweet_html=self.get_tweet_html)).filter(track=['brexit'])
+        twitter_stream = Stream(self.auth, twitter_listener(num_tweets_to_grab=self.num_tweets_to_grab, retweet_count=self.retweet_count, stats=self.stats)).filter(track=['brexit'])
         try:
             twitter_stream.sample()
         except Exception as e:
@@ -119,7 +131,7 @@ class TwitterMain():
     def get_tweet_html(self, id):
         oembed = self.api.get_oembed(id=id, hide_media = True, hide_thread = True)
 
-        tweet_html = oembed['html'].strip("\n")
+        # tweet_html = oembed['html'].strip("\n")
 
         return tweet_html
 
