@@ -101,7 +101,7 @@ class TwitterMain():
         self.stats = stats()
 
     def get_streaming_data(self):
-        twitter_stream = Stream(self.auth, twitter_listener(num_tweets_to_grab=self.num_tweets_to_grab, retweet_count=self.retweet_count, stats=self.stats)).saple()
+        twitter_stream = Stream(self.auth, twitter_listener(num_tweets_to_grab=self.num_tweets_to_grab, retweet_count=self.retweet_count, stats=self.stats)).filter(track=['brexit'])
         try:
             twitter_stream.sample()
         except Exception as e:
