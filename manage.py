@@ -5,7 +5,7 @@ from flask_script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
 from app import app, db
-from twitter_listener import TwitterMain
+from twitter_listener import TwitterMain, twitter_listener
 
 manager = Manager(app)
 migrate = Migrate(app, db)

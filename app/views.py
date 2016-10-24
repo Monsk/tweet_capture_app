@@ -27,13 +27,13 @@ def getLangFraction():
         languages = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
                  'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
                  'ja': 'Japanese', 'ko': 'Korean', 'lt': 'Lithuanian', 'lv': 'Latvian', 'ms': 'Malay', 'nl': 'Dutch', 'no': 'Norwegian', 'pl': 'Polish', 'pt': 'Portuguese', 'ro': 'Romanian',
-                 'ru': 'Russian', 'sk': 'Slovak', 'sl': 'Slovenian', 'sr': 'Serbian', 'sv': 'Swedish', 'th': 'Thai', 'tl': 'Filipino', 'tr': 'Turkish', 'uk': 'Ukrainian', 'ur': 'Urdu',
+                 'ru': 'Russian', 'sk': 'Slovak', 'sl': 'Slovenian', 'sr': 'Serbian', 'sv': 'Swedish', 'th': 'Thai', 'tl': 'Filipino', 'tr': 'Turkish', 'uk': 'Ukrainian', 'und': 'Undetermined', 'ur': 'Urdu',
                  'vi': 'Vietnamese', 'zh_CN': 'Chinese (simplified)', 'zh_TW': 'Chinese (traditional)'}
 
         langs = tweets['lang'].dropna()
         langCounter = pd.DataFrame(langs.value_counts())
         langFraction = 100 * langCounter / langCounter.sum()
-        langFraction = langFraction.round(2)
+        langFraction = langFraction.round(3)
         langFraction.index = [languages[x] for x in langFraction.index]
         langFraction = [tuple(x) for x in langFraction.itertuples()]
 
@@ -53,5 +53,8 @@ def chart():
 
     tzoneFraction = getTZoneFraction()
     langFraction = getLangFraction()
+
+    #Remove English from the list as it overshadows the smaller fractions
+    langFraction = [i for i in langFraction if i[0] not in ('English', 'Undetermined')]
 
     return render_template('chart.html', **locals())
