@@ -54,7 +54,8 @@ def chart():
     tzoneFraction = getTZoneFraction()
     langFraction = getLangFraction()
 
-    #Remove English from the list as it overshadows the smaller fractions
+    #Remove English from the list as it overshadows the smaller fractions, then truncate to 10 items
     langFraction = [i for i in langFraction if i[0] not in ('English', 'Undetermined')]
+    del langFraction[10:]
 
     return render_template('chart.html', **locals())

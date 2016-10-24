@@ -9,6 +9,7 @@ else:
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
 
 SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
+SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 cons_key = 'vIU2HWFITKPVgK8i3IDuZqKiY'
 cons_sec = 'METFTMQRs4QTdsR3jhO0CgoABUPK4SP7QiufwibZCoo5R4ZJV1'
