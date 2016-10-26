@@ -7,3 +7,4 @@ venv/
 
 sqlite.db
 tweets.csv
+twitter_listener.py
