@@ -17,7 +17,7 @@ def catch_tweets():
 
     # pdb.set_trace()
     twit = twitter_listener(num_tweets_to_grab)
-    twit.get_streaming_data()
+    twit.get_streaming_data('brexit')
 
 if __name__ == "__main__":
     manager.run()

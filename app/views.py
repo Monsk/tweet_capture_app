@@ -1,13 +1,23 @@
-from flask import Flask, render_template
 import pandas as  pd
+import json, re
+from flask import (Flask, flash, Markup, redirect, render_template, request,
+                   Response, session, url_for)
 
 from app import app, db
 from .models import Tweet
 
-def getTZoneFraction():
-        # Extract the timezones, count them, and then turn the counter dict into a list of tuples
+from nvd3 import discreteBarChart
 
-        tweets = pd.read_sql('tweet', db.engine)
+# from pyxley import UILayout
+# from pyxley.filters import SelectButton
+# from pyxley.charts.mg import LineChart, Figure
+
+tweets = pd.read_csv('tweets.csv')
+# tweets = pd.read_sql('tweet', db.engine)
+
+
+def getTZoneFraction(tweets):
+        # Extract the timezones, count them, and then turn the counter dict into a list of tuples
 
         tzones = tweets['time_zone'].dropna()
         tzoneCounter = pd.DataFrame(tzones.value_counts())
@@ -19,13 +29,11 @@ def getTZoneFraction():
 
         return tzoneFraction
 
-def getLangFraction():
+def getLangFraction(tweets):
         # Extract the languages, count them, and then turn the counter dict into a list of tuples
 
-        tweets = pd.read_sql('tweet', db.engine)
-
         languages = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
-                 'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'in': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
+                 'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'ht': 'Haitian', 'hu': 'Hungarian', 'hy': 'Armenian', 'id': 'Indonesian', 'in': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
                  'ja': 'Japanese', 'ko': 'Korean', 'lt': 'Lithuanian', 'lv': 'Latvian', 'ms': 'Malay', 'nl': 'Dutch', 'no': 'Norwegian', 'pl': 'Polish', 'pt': 'Portuguese', 'ro': 'Romanian',
                  'ru': 'Russian', 'sk': 'Slovak', 'sl': 'Slovenian', 'sr': 'Serbian', 'sv': 'Swedish', 'th': 'Thai', 'tl': 'Filipino', 'tr': 'Turkish', 'uk': 'Ukrainian', 'und': 'Undetermined', 'ur': 'Urdu',
                  'vi': 'Vietnamese', 'zh': 'Chinese'}
@@ -35,27 +43,29 @@ def getLangFraction():
         langFraction = 100 * langCounter / langCounter.sum()
         langFraction = langFraction.round(3)
         langFraction.index = [languages[x] for x in langFraction.index]
-        langFraction = [tuple(x) for x in langFraction.itertuples()]
+        # langFraction = [tuple(x) for x in langFraction.itertuples()]
+        langFraction = langFraction.drop(['English','Undetermined']).head(10)
 
         return langFraction
 
 
 @app.route("/")
 def main():
-    return render_template("lang.html")
+    langFraction = getLangFraction(tweets)
+    return render_template("index.html", charts=charts)
 
 @app.route("/chart")
 def chart():
-	# The data can come from anywhere you can read it; for instance, a SQL
+	# The data can come from anywhere you can read it; for instance, an SQL
 	# query or a file on the filesystem created by another script.
 	# This example expects two values per row; for more complicated examples,
 	# refer to the Google Charts gallery.
 
-    tzoneFraction = getTZoneFraction()
-    langFraction = getLangFraction()
+    tzoneFraction = getTZoneFraction(tweets)
+    langFraction = getLangFraction(tweets)
 
     #Remove English from the list as it overshadows the smaller fractions, then truncate to 10 items
-    langFraction = [i for i in langFraction if i[0] not in ('English', 'Undetermined')]
-    del langFraction[10:]
+    # langFraction = [i for i in langFraction if i[0] not in ('English', 'Undetermined')]
+    # del langFraction[10:]
 
     return render_template('chart.html', **locals())

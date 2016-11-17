@@ -1,0 +1,21 @@
+{
+  "name": "twitter-capture",
+  "homepage": "https://github.com/Monsk/tweet_capture_app",
+  "description": "Brexit Twitter analysis app",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "^15.3.2",
+    "pyxley": "^0.0.6"
+  },
+  "resolutions": {
+    "d3": "3.5.5"
+  }
+}

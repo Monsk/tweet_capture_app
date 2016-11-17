@@ -22,10 +22,10 @@ class twitter_listener():
         self.counter = 0
         self.num_tweets_to_grab = num_tweets_to_grab
 
-    def get_streaming_data(self):
+    def get_streaming_data(self, tracker):
         while True:
             try:
-                iterator = api.request('statuses/filter', {'track':'brexit'}).get_iterator()
+                iterator = api.request('statuses/filter', {'track':tracker}).get_iterator()
                 for item in iterator:
                     if 'text' in item:
 
@@ -79,14 +79,14 @@ class twitter_listener():
                         else:
                             # temporary interruption, re-try request
                             break
-            except TwitterRequestError as e:
+            except TwitterError.TwitterRequestError as e:
                 if e.status_code < 500:
                     # something needs to be fixed before re-connecting
                     raise
                 else:
                     # temporary interruption, re-try request
                     pass
-            except TwitterConnectionError:
+            except TwitterError.TwitterConnectionError:
                 # temporary interruption, re-try request
                 pass
 
@@ -97,4 +97,4 @@ if __name__ == "__main__":
 
     # pdb.set_trace()
     twit = twitter_listener(num_tweets_to_grab)
-    twit.get_streaming_data()
+    twit.get_streaming_data('brexit')
