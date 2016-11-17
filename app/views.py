@@ -6,12 +6,6 @@ from flask import (Flask, flash, Markup, redirect, render_template, request,
 from app import app, db
 from .models import Tweet
 
-from nvd3 import discreteBarChart
-
-# from pyxley import UILayout
-# from pyxley.filters import SelectButton
-# from pyxley.charts.mg import LineChart, Figure
-
 tweets = pd.read_csv('tweets.csv')
 # tweets = pd.read_sql('tweet', db.engine)
 
