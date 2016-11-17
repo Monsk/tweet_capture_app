@@ -22,7 +22,7 @@ class Tweet(db.Model):
     time_zone = db.Column(db.String)
     source = db.Column(db.String)
     longitude = db.Column(db.Float(10, 6))
-    latitude = db.Column(db.Float(10, 6))
+    latitude  = db.Column(db.Float(10, 6))
     user_location = db.Column(db.String)
     user_id = db.Column(db.String)
     user_screen_name = db.Column(db.String)

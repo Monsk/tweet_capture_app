@@ -40,7 +40,7 @@ class twitter_listener():
                             lang = item["lang"],
                             time_zone = item["user"]["time_zone"],
                             source = item["source"],
-                            # geolocation = item["geo"],
+                            geolocation = item["geo"],
                             user_location = item["user"]["location"],
                             user_id = item["user"]["id_str"],
                             user_screen_name = item["user"]["screen_name"],

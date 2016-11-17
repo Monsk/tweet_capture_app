@@ -26,8 +26,6 @@ def upgrade():
     sa.Column('lang', sa.String(), nullable=True),
     sa.Column('time_zone', sa.String(), nullable=True),
     sa.Column('source', sa.String(), nullable=True),
-    sa.Column('longitude', sa.Float(precision=10, asdecimal=6), nullable=True),
-    sa.Column('latitude', sa.Float(precision=10, asdecimal=6), nullable=True),
     sa.Column('user_location', sa.String(), nullable=True),
     sa.Column('user_id', sa.String(), nullable=True),
     sa.Column('user_screen_name', sa.String(), nullable=True),
