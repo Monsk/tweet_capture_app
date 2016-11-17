@@ -46,7 +46,7 @@ def getLangFraction(tweets):
 @app.route("/")
 def main():
     langFraction = getLangFraction(tweets)
-    return render_template("index.html", charts=charts)
+    return render_template("index.html")
 
 @app.route("/chart")
 def chart():
