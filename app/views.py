@@ -6,8 +6,8 @@ from flask import (Flask, flash, Markup, redirect, render_template, request,
 from app import app, db
 from .models import Tweet
 
-tweets = pd.read_csv('tweets.csv')
-# tweets = pd.read_sql('tweet', db.engine)
+# tweets = pd.read_csv('tweets.csv')
+tweets = pd.read_sql('tweet', db.engine)
 
 
 def getTZoneFraction(tweets):
@@ -36,17 +36,20 @@ def getLangFraction(tweets):
         langCounter = pd.DataFrame(langs.value_counts())
         langFraction = 100 * langCounter / langCounter.sum()
         langFraction = langFraction.round(3)
-        langFraction.index = [languages[x] for x in langFraction.index]
+        langFraction['language'] = [languages[x] for x in langFraction.index]
+        langFraction = langFraction.rename(columns={'lang': 'percentage'})
         # langFraction = [tuple(x) for x in langFraction.itertuples()]
-        langFraction = langFraction.drop(['English','Undetermined']).head(10)
+        # langFraction = langFraction.drop(['en','und']).head(10)
+        langFraction = langFraction[~langFraction.index.isin(['en','und'])].head(10)
+        print(langFraction)
 
         return langFraction
 
 
 @app.route("/")
 def main():
-    langFraction = getLangFraction(tweets)
-    return render_template("index.html")
+    langFraction = getLangFraction(tweets).to_json(orient='records')
+    return render_template("index.html", data = langFraction)
 
 @app.route("/chart")
 def chart():

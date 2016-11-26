@@ -6,22 +6,11 @@
     font-size: 60px;
 }
 
-.dc-chart g.row text {
+/*.dc-chart g.row text {
     fill: black;
     font-size: 12px;
-}
+}*/
 
-.svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
-}
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
+.axis {
+  font-size: 20px;
 }

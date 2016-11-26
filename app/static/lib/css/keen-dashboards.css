@@ -46,8 +46,13 @@ body.application hr {
 .chart-wrapper .chart-title {
   border-bottom: 1px solid #d7d7d7;
   color: #666;
-  font-size: 14px;
+  font-size: 24px;
   font-weight: 200;
+  padding: 7px 10px 4px;
+}
+.chart-wrapper .chart-title .chart-options {
+  color: #666;
+  font-size: 14px;
   padding: 7px 10px 4px;
 }
 
