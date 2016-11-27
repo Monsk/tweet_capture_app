@@ -63,7 +63,7 @@
           <!-- Time Chart -->
 
           <!-- Resources Pie -->
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <div class="chart-wrapper">
               <div class="chart-title">
                 Resources Type
@@ -72,11 +72,11 @@
                 <div id="resource-type-row-chart"></div>
               </div>
             </div>
-          </div>
+          </div> -->
           <!-- Resources Pie -->
 
           <!-- Poverty Pie -->
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <div class="chart-wrapper">
               <div class="chart-title">
                 Poverty Level
@@ -85,7 +85,7 @@
                 <div id="poverty-level-row-chart"></div>
               </div>
             </div>
-          </div>
+          </div> -->
           <!-- Poverty Pie -->
 
         </div>
@@ -95,17 +95,17 @@
       <div class="col-sm-6">
         <div class="chart-wrapper">
           <div class="chart-title">
-            Distribution of Donations
+            Prevalence of tweets in different languages over time
           </div>
           <div class="chart-stage">
-            <div id="us-chart"></div>
+            <div id="timeLangChart"></div>
           </div>
         </div>
       </div>
       <!-- Map -->
 
       <!-- Metric 1 -->
-      <div class="col-sm-3">
+      <!-- <div class="col-sm-3">
         <div class="chart-wrapper">
           <div class="chart-title">
             Total Number of Donations
@@ -114,11 +114,11 @@
             <div id="number-projects-nd"></div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- Metric 1 -->
 
       <!-- Metric 2 -->
-      <div class="col-sm-3">
+      <!-- <div class="col-sm-3">
         <div class="chart-wrapper">
           <div class="chart-title">
             Total Donations in USD
@@ -127,7 +127,7 @@
             <div id="total-donations-nd"></div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- Metric 2 -->
 
     </div>
@@ -148,9 +148,21 @@
 
 <script>
 
+var svg = dimple.newSvg("#timeLangChart", "100%", 500);
+var timeLangData = {{ timeLangData | safe }}
+
+var timeLangChart = new dimple.chart(svg, timeLangData);
+var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%d %b %Y");
+var y = timeLangChart.addMeasureAxis("y", "percentage");
+var mySeries = timeLangChart.addSeries("lang", dimple.plot.line);
+
+timeLangChart.draw();
+
+
+
 // standard dimple svg definition for a responsive chart
 var svg = dimple.newSvg("#discreteBarChart", "100%", 500);
-var data = {{ data | safe }}
+var data = {{ langData | safe }}
 
 // for customClassList see http://dimplejs.org/advanced_examples_viewer.html?id=advanced_bars_sketchy
 var chart = new dimple.chart(svg, data);
