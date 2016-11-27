@@ -32,7 +32,7 @@
             <div class="chart-wrapper">
               <div class="chart-title">
                 Most common languages
-                <small class="chart-options pull-right">
+                <!-- <small class="chart-options pull-right">
                   <label class="pull-left" style="margin-right: 10px;">
                     Street:
                     <select>
@@ -52,7 +52,7 @@
                       <option>500</option>
                     </select>
                   </label>
-                </small>
+                </small> -->
               </div>
               <div class="chart-stage">
                 <div id="discreteBarChart">
@@ -95,7 +95,7 @@
       <div class="col-sm-6">
         <div class="chart-wrapper">
           <div class="chart-title">
-            Prevalence of tweets in different languages over time
+            Most common languages over time
           </div>
           <div class="chart-stage">
             <div id="timeLangChart"></div>
@@ -154,7 +154,19 @@ var timeLangData = {{ timeLangData | safe }}
 var timeLangChart = new dimple.chart(svg, timeLangData);
 var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%d %b %Y");
 var y = timeLangChart.addMeasureAxis("y", "percentage");
-var mySeries = timeLangChart.addSeries("lang", dimple.plot.line);
+var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
+mySeries.lineMarkers = true;
+
+timeLangChart.defaultColors = [
+    new dimple.color("#3498db", "#3498db", 1), // blue
+    new dimple.color("#e74c3c", "#c0392b", 1), // red
+    new dimple.color("#2ecc71", "#2ecc71", 1), // green
+    new dimple.color("#9b59b6", "#9b59b6", 1), // purple
+    new dimple.color("#e67e22", "#e67e22", 1), // orange
+    new dimple.color("#f1c40f", "#f1c40f", 1), // yellow
+    new dimple.color("#1abc9c", "#1abc9c", 1), // turquoise
+    new dimple.color("#95a5a6", "#95a5a6", 1)  // gray
+];
 
 timeLangChart.draw();
 

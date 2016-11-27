@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from app import app, db
 from .models import Tweet
 
-# tweets = pd.read_csv('tweets.csv')
-tweets = pd.read_sql('tweet', db.engine)
+tweets = pd.read_csv('tweets.csv')
+# tweets = pd.read_sql('tweet', db.engine)
 
 languages = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
          'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'ht': 'Haitian', 'hu': 'Hungarian', 'hy': 'Armenian', 'id': 'Indonesian', 'in': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
@@ -39,7 +39,6 @@ def getLangFraction(tweets):
     langFraction['language'] = [languages[x] for x in langFraction.index]
     langFraction = langFraction.rename(columns={'lang': 'percentage'})
     langFraction = langFraction[~langFraction.index.isin(['en','und'])].head(10)
-    print(langFraction)
 
     return langFraction
 
@@ -54,6 +53,7 @@ def getTimeLangFraction(tweets, commonLanguages):
     groupTweets = tweets.groupby([tweets['occurred_at_week'], 'lang']).lang.count()
     groupTweets.rename('count', inplace=True)
     groupTweets = groupTweets.reset_index()
+    groupTweets['language'] = [languages[x] for x in groupTweets.lang]
 
     ggTweets = groupTweets.groupby('occurred_at_week')['count'].sum()
 
