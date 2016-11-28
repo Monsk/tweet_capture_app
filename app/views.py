@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from app import app, db
 from .models import Tweet
 
-tweets = pd.read_csv('tweets.csv')
-# tweets = pd.read_sql('tweet', db.engine)
+# tweets = pd.read_csv('tweets.csv')
+tweets = pd.read_sql('tweet', db.engine)
 
 languages = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian',
          'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'ht': 'Haitian', 'hu': 'Hungarian', 'hy': 'Armenian', 'id': 'Indonesian', 'in': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
