@@ -157,6 +157,21 @@ var y = timeLangChart.addMeasureAxis("y", "percentage");
 var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
 mySeries.lineMarkers = true;
 
+// custom tooltips
+mySeries.getTooltipText = function (e) {
+ return [
+    e.aggField
+     ];
+   };
+
+// Axis formatting.
+   x.timePeriod = d3.time.days;
+   x.timeInterval = 7;
+   x.fontSize = 14;
+   y.fontSize = 14;
+   y.title = "Percentage of tweets";
+
+
 timeLangChart.defaultColors = [
     new dimple.color("#3498db", "#3498db", 1), // blue
     new dimple.color("#e74c3c", "#c0392b", 1), // red
@@ -168,7 +183,9 @@ timeLangChart.defaultColors = [
     new dimple.color("#95a5a6", "#95a5a6", 1)  // gray
 ];
 
-timeLangChart.draw();
+timeLangChart.draw(1000);
+x.titleShape.remove();
+
 
 
 
@@ -181,17 +198,15 @@ var chart = new dimple.chart(svg, data);
 var xAxis = chart.addCategoryAxis("x", "language");
 var yAxis = chart.addMeasureAxis("y", "percentage");
 var mySeries = chart.addSeries("language", dimple.plot.bar);
-chart.customClassList = {
-  axisLabel: 'axis',
-  axisTitle: 'axis'
-};
+xAxis.fontSize = 14;
+yAxis.fontSize = 14;
 
   // Draw without any axes
   // xAxis.hidden = true;
   yAxis.hidden = true;
 
   // Set small margins as there is going to be no axes displayed
-  chart.setMargins(50, 50, 50, 50);
+  chart.setMargins(50, 50, 50, 80);
 
   // Define a custom color palette.  These colours are based on the excellent
   // set at http://flatuicolors.com/
@@ -266,8 +281,7 @@ chart.customClassList = {
       svg.selectAll(".dimple-hover-text").remove();
     });
 
-
-chart.draw();
+chart.draw(1000);
 
 // Add a method to draw the chart on resize of the window - currently not
 // working with the custom bar chart styling
