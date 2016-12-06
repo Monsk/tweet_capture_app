@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from app import app, db
 from .models import Tweet
 
-# tweets = pd.read_csv('tweets.csv')
-tweets = pd.read_sql('tweet', db.engine)
+tweets = pd.read_csv('tweets.csv')
+# tweets = pd.read_sql('tweet', db.engine)
 
 languages = {'ar': 'Arabic', 'bg': 'Bulgarian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian', 'eu': 'Basque',
          'fa': 'Persian', 'fi': 'Finnish', 'fr': 'French', 'hi': 'Hindi', 'hr': 'Croatian', 'ht': 'Haitian', 'hu': 'Hungarian', 'hy': 'Armenian', 'id': 'Indonesian', 'in': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew',
@@ -31,13 +31,14 @@ def getTZoneFraction(tweets):
 
 def getLangFraction(tweets):
     # Extract the languages, count them, and then turn the counter dict into a list of tuples
-
     langs = tweets['lang'].dropna()
     langCounter = pd.DataFrame(langs.value_counts())
     langFraction = 100 * langCounter / langCounter.sum()
     langFraction = langFraction.round(3)
+    # Convert iso codes into language names
     langFraction['language'] = [languages[x] for x in langFraction.index]
     langFraction = langFraction.rename(columns={'lang': 'percentage'})
+    # Remove English and undefined languages, return the top 10 remaining
     langFraction = langFraction[~langFraction.index.isin(['en','und'])].head(10)
 
     return langFraction
@@ -63,17 +64,28 @@ def getTimeLangFraction(tweets, commonLanguages):
 
     return groupTweets
 
+def getCommonSources(tweets):
+    # Extract the tweet sources, count them, and then turn the counter dict into a list of tuples
+    sources = tweets['source_user_screen_name'].dropna()
+    sourceCounter = pd.DataFrame(sources.value_counts())
+    sourceFraction = 100 * sourceCounter / sourceCounter.sum()
+    sourceFraction = sourceFraction.round(3)
+    sourceFraction = sourceFraction.reset_index()
+    sourceFraction = sourceFraction.rename(columns={'source_user_screen_name': 'percentage', 'index': 'source'})
+    sourceFraction = sourceFraction.head(10)
+    return sourceFraction
 
 
 @app.route("/")
 def main():
     langFraction = getLangFraction(tweets)
+    sourceFraction = getCommonSources(tweets).to_json(orient='records')
     commonLanguages = langFraction.index
     langFraction = langFraction.to_json(orient='records')
     timeLangFraction = getTimeLangFraction(tweets, commonLanguages).to_json(orient='records')
     # print(timeLangFraction)
 
-    return render_template("index.html", langData = langFraction, timeLangData = timeLangFraction)
+    return render_template("index.html", langData = langFraction, timeLangData = timeLangFraction, sourceData = sourceFraction)
 
 @app.route("/chart")
 def chart():
