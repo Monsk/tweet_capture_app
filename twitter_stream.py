@@ -92,7 +92,7 @@ class twitter_listener():
 
 
 if __name__ == "__main__":
-    num_tweets_to_grab = 10
+    num_tweets_to_grab = 100
 
     # pdb.set_trace()
     twit = twitter_listener(num_tweets_to_grab)

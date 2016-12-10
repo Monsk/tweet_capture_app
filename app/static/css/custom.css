@@ -9,3 +9,32 @@
 .dimple-tooltip {
   font-size: 14px !important;
 }
+
+.intro-copy {
+  background: #ffffff;
+  border: 1px solid #e2e2e2;
+  /*color: #808080;*/
+  font-size: 16px;
+  padding: 8px 10px 5px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+.twitter-content {
+  display: none;
+}
+
+.twitter-button {
+  background: #ffffff;
+  color: #808080;
+  border: 1px solid #808080;
+
+}
+
+.center-wrapper {
+  text-align: center;
+}
+
+#hide-twitter-content {
+  display: none;
+}

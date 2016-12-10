@@ -4,10 +4,42 @@
   <title>Dashboard</title>
   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
 
-  <link rel="stylesheet" href="./static/lib/css//bootstrap.min.css">
+  <link rel="stylesheet" href="./static/lib/css/bootstrap.min.css">
   <link rel="stylesheet" href="./static/lib/css/keen-dashboards.css">
   <link rel="stylesheet" href="./static/lib/css/dc.css">
   <link rel="stylesheet" href="./static/css/custom.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css"> -->
+  <script src="./static/lib/js/jquery.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script> -->
+
+
+  <script>
+  $(function() {
+    $(".twitter-button").on("click",function(e) {
+      var toggle_div_id = 'timeline_' + $(this).attr('id');
+      e.preventDefault();
+      $(".btn.active").each(function(i, obj) {
+        $(this).toggleClass('active');
+      });
+      $(".twitter-content").hide();
+      $('#'+toggle_div_id).show();
+      $("#hide-twitter-content").show();
+      $('html, body').animate({
+        scrollTop: $('#'+toggle_div_id).offset().top
+      }, 500);
+    });
+  });
+
+  $(function() {
+    $('#hide-twitter-content').on("click",function(e) {
+      $(".twitter-content").hide();
+      $(this).hide();
+      $(".btn.active").each(function(i, obj) {
+        $(this).toggleClass('active');
+      });
+    })
+  })
+  </script>
 
 </head>
 <body class="application">
@@ -24,6 +56,22 @@
 
     <div class="row">
 
+      <div class="col-sm-12">
+        <div class="intro-copy">
+          <h1>About</h1>
+          <p>
+            The purpose of this project is to chronicle the process of Brexit through an analysis of the discourse on Twitter. Every hour 100 tweets referencing Brexit are saved to a database, creating a dataset that is currently over 100 000 tweets in size and growing by 2400 every day. This will continue until the process of Brexit is complete and the UK has left the European Union.
+          </p>
+          <p>
+            My intention is to keep building out the functionality of the site to enable you to explore the dataset through visualisations. I will be writing occasional blog posts on my findings on <a href="http://www.simonhunter.co/data" target="_blank">my site</a>.
+          </p>
+          <p>
+            Any comments or requests, please hit me up: <a href="https://twitter.com/intent/tweet?screen_name=SimonHunter28"  data-show-count="false">@simonhunter28</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+          </p>
+        </div>
+      </div>
+
+
       <div class="col-sm-6">
         <div class="row">
 
@@ -33,377 +81,97 @@
               <div class="chart-title">
                 Most commonly retweeted sources
                 <!-- <small class="chart-options pull-right">
-                  <label class="pull-left" style="margin-right: 10px;">
-                    Street:
-                    <select>
-                      <option>All blocks</option>
-                      <option>Howard</option>
-                      <option selected>Folsom</option>
-                      <option>Harrison</option>
-                    </select>
-                  </label>
-                  <label>
-                    Block:
-                    <select>
-                      <option>All blocks</option>
-                      <option>900</option>
-                      <option selected>800</option>
-                      <option>700</option>
-                      <option>500</option>
-                    </select>
-                  </label>
-                </small> -->
-              </div>
-              <div class="chart-stage">
-                <div id="sourceBarChart">
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Time Chart -->
-
-          <!-- Resources Pie -->
-          <!-- <div class="col-sm-6">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Resources Type
-              </div>
-              <div class="chart-stage">
-                <div id="resource-type-row-chart"></div>
-              </div>
-            </div>
-          </div> -->
-          <!-- Resources Pie -->
-
-          <!-- Poverty Pie -->
-          <!-- <div class="col-sm-6">
-            <div class="chart-wrapper">
-              <div class="chart-title">
-                Poverty Level
-              </div>
-              <div class="chart-stage">
-                <div id="poverty-level-row-chart"></div>
-              </div>
-            </div>
-          </div> -->
-          <!-- Poverty Pie -->
-
-        </div>
+                <label class="pull-left" style="margin-right: 10px;">
+                Street:
+                <select>
+                <option>All blocks</option>
+                <option>Howard</option>
+                <option selected>Folsom</option>
+                <option>Harrison</option>
+              </select>
+            </label>
+            <label>
+            Block:
+            <select>
+            <option>All blocks</option>
+            <option>900</option>
+            <option selected>800</option>
+            <option>700</option>
+            <option>500</option>
+          </select>
+        </label>
+      </small> -->
+    </div>
+    <div class="chart-stage">
+      <div id="sourceBarChart">
       </div>
-
-      <!-- Map -->
-      <div class="col-sm-6">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Most common languages over time
-          </div>
-          <div class="chart-stage">
-            <div id="timeLangChart"></div>
-          </div>
-        </div>
-      </div>
-      <!-- Map -->
-
-      <!-- Metric 1 -->
-      <!-- <div class="col-sm-3">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Total Number of Donations
-          </div>
-          <div class="chart-stage">
-            <div id="number-projects-nd"></div>
-          </div>
-        </div>
-      </div> -->
-      <!-- Metric 1 -->
-
-      <!-- Metric 2 -->
-      <!-- <div class="col-sm-3">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Total Donations in USD
-          </div>
-          <div class="chart-stage">
-            <div id="total-donations-nd"></div>
-          </div>
-        </div>
-      </div> -->
-      <!-- Metric 2 -->
-
     </div>
 
+    <div class="chart-notes">
+      <h4>Explore these sources:</h4>
+        <div class="btn-group btn-group-justified" data-toggle="buttons">
+          {% for source in topSources[-10:-5] %}
+          <label class="btn twitter-button" id="button_{{source['source']}}">
+            <input type="radio" name="options" autocomplete="off">{{ source['source'] }}
+          </label>
+          {% endfor %}
+        </div>
+        <div class="btn-group btn-group-justified" data-toggle="buttons">
+          {% for source in topSources[-5:] %}
+          <label class="btn twitter-button" id="button_{{source['source']}}">
+            <input type="radio" name="options" autocomplete="off">{{ source['source'] }}
+          </label>
+          {% endfor %}
+        </div>
+      <div class="twitter-timeline" >
+        {% for source in topSources %}
+        {% set mystring = "https://twitter.com/" + source['source'] %}
+        <div id="timeline_button_{{source['source']}}" class="twitter-content">
+          <a class="twitter-timeline" data-lang="en" data-height="500" data-theme="light" data-link-color="#2B7BB9" href={{ mystring }}>Tweets by {{ source['source'] }}</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+        {% endfor %}
+        <div class="center-wrapper">
+          <button id="hide-twitter-content" class="btn btn-primary">Hide</button>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
+</div>
+</div>
 
-  <hr>
-  <p class="small text-muted">Built by <a href="http://simonhunter.co" target="_blank">Simon Hunter</a></p>
+<!-- Common Languages Chart -->
+<div class="col-sm-6">
+  <div class="chart-wrapper">
+    <div class="chart-title">
+      Most common languages over time
+    </div>
+    <div class="chart-stage">
+      <div id="timeLangChart"></div>
+    </div>
+  </div>
+</div>
+<!-- Common Languages Chart -->
 
 </div>
 
-<script src="./static/lib/js/jquery.min.js"></script>
+<hr>
+<p class="small text-muted">Built by <a href="http://simonhunter.co" target="_blank">Simon Hunter</a></p>
+
+</div>
+
 <script src="./static/lib/js/bootstrap.min.js"></script>
 <script src="./static/lib/js/d3.v3.5.5.min.js"></script>
 <script src="./static/lib/js/dimple.v2.0.0.min.js"></script>
 <!-- <script src="./static/lib/js/dimple.v2.1.2.min.js"></script> -->
 
-
 <script>
-
-// ----------------------------------------------------------------------
-// COMMON LANGUAGES OVER TIME LINE CHART
-// ----------------------------------------------------------------------
-
-var svg = dimple.newSvg("#timeLangChart", "100%", 500);
 var timeLangData = {{ timeLangData | safe }}
-
-var timeLangChart = new dimple.chart(svg, timeLangData);
-var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%d %b %Y");
-var y = timeLangChart.addMeasureAxis("y", "percentage");
-var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
-mySeries.lineMarkers = true;
-
-// custom tooltips
-mySeries.getTooltipText = function (e) {
- return [
-    e.aggField
-     ];
-   };
-
-// Axis formatting.
-   x.timePeriod = d3.time.weeks;
-   x.timeInterval = 1;
-   x.fontSize = 14;
-   y.fontSize = 14;
-   y.title = "Percentage of tweets";
-
-
-timeLangChart.defaultColors = [
-    new dimple.color("#3498db", "#3498db", 1), // blue
-    new dimple.color("#e74c3c", "#c0392b", 1), // red
-    new dimple.color("#2ecc71", "#2ecc71", 1), // green
-    new dimple.color("#9b59b6", "#9b59b6", 1), // purple
-    new dimple.color("#e67e22", "#e67e22", 1), // orange
-    new dimple.color("#f1c40f", "#f1c40f", 1), // yellow
-    new dimple.color("#1abc9c", "#1abc9c", 1), // turquoise
-    new dimple.color("#95a5a6", "#95a5a6", 1)  // gray
-];
-
-timeLangChart.draw(1000);
-x.titleShape.remove();
-
-// ----------------------------------------------------------------------
-// SOURCE BAR CHART
-// ----------------------------------------------------------------------
-
-// standard dimple svg definition for a responsive chart
-var svg = dimple.newSvg("#sourceBarChart", "100%", 500);
 var sourceData = {{ sourceData | safe }}
-
-// for customClassList see http://dimplejs.org/advanced_examples_viewer.html?id=advanced_bars_sketchy
-var sourceChart = new dimple.chart(svg, sourceData);
-var xAxis = sourceChart.addMeasureAxis("x", "percentage");
-var yAxis = sourceChart.addCategoryAxis("y", "source");
-yAxis.addOrderRule("percentage");
-var mySeries = sourceChart.addSeries("source", dimple.plot.bar);
-xAxis.fontSize = 14;
-yAxis.fontSize = 14;
-yAxis.title = '';
-
-  // Draw without any axes
-  xAxis.hidden = true;
-  // yAxis.hidden = true;
-
-  // Set small margins as there is going to be no axes displayed
-  sourceChart.setMargins(150, 50, 20, 20);
-
-  // Define a custom color palette.  These colours are based on the excellent
-  // set at http://flatuicolors.com/
-  sourceChart.defaultColors = [
-      new dimple.color("#3498db", "#2980b9", 1), // blue
-      new dimple.color("#e74c3c", "#c0392b", 1), // red
-      new dimple.color("#2ecc71", "#27ae60", 1), // green
-      new dimple.color("#9b59b6", "#8e44ad", 1), // purple
-      new dimple.color("#e67e22", "#d35400", 1), // orange
-      new dimple.color("#f1c40f", "#f39c12", 1), // yellow
-      new dimple.color("#1abc9c", "#16a085", 1), // turquoise
-      new dimple.color("#95a5a6", "#7f8c8d", 1)  // gray
-  ];
-
-  // Set some custom display elements for each series shape
-  mySeries.afterDraw = function (s, d) {
-
-    // I've defined the width in terms of the golden ratio as it seems like the sort
-    // of thing a designer would do.
-    var shape = d3.select(s),
-        goldenRatio = 1.61803398875;
-
-    // Add a rectangle to the bar giving a nice style.  The idea was borrowed
-    // from sirocco's question here:
-    // http://stackoverflow.com/questions/25044608/dimplejs-barchart-styling-columns
-    svg.append("rect")
-      .attr("x", shape.attr("x"))
-      .attr("y", shape.attr("y"))
-      .attr("height", (0.5 * shape.attr("height")) / goldenRatio)
-      .attr("width", shape.attr("width"))
-      .style("fill", shape.style("stroke"))
-      .style("opacity", 1)
-      .style("pointer-events", "none");
-
-    // Draw without a border
-    shape.attr("stroke", shape.attr("fill"));
-
-  };
-  // custom tooltips
-  mySeries.getTooltipText = function (e) {
-   return [
-      e.xValue + ' %'
-       ];
-     };
-  // // Override the standard tooltip behaviour
-  //   mySeries.addEventHandler("mouseover", function (e){
-  //     console.log(e)
-  //
-  //     // Draw the text information in the top left corner
-  //     svg.selectAll(".dimple-hover-text")
-  //       .data([e.yValue, String(d3.format(".f")(e.aggField)) + "%"])
-  //         .enter()
-  //         .append("text")
-  //         .attr("class", "dimple-hover-text")
-  //         .attr("x", sourceChart._xPixels() + sourceChart._widthPixels() - 25)
-  //         .attr("y", function (d, i) { return sourceChart._yPixels() + sourceChart._heightPixels() - 50 + i * 25; })
-  //         .style("text-anchor", "end")
-  //         .style("font-size", "20px")
-  //         .style("fill", sourceChart.getColor(e.yValue).fill)
-  //         .style("pointer-events", "none")
-  //         .text(function (d) { return d ; } );
-  //
-  //     // Put a coloured bar next to the text for no good reason
-  //     svg.append("rect")
-  //       .attr("class", "dimple-hover-text")
-  //       .attr("x", sourceChart._xPixels() + sourceChart._widthPixels() - 15)
-  //       .attr("y", sourceChart._yPixels() + sourceChart._heightPixels() - 70)
-  //       .attr("height", 60)
-  //       .attr("width", 10)
-  //       .style("fill", sourceChart.getColor(e.yValue).fill)
-  //       .style("opacity", 1)
-  //       .style("pointer-events", "none");
-  //
-  //   });
-  //
-  //   // Clear the text on exit
-  //   mySeries.addEventHandler("mouseleave", function (e) {
-  //     svg.selectAll(".dimple-hover-text").remove();
-  //   });
-
-sourceChart.draw(1000);
-
-// ----------------------------------------------------------------------
-// LANGUAGE BAR CHART
-// ----------------------------------------------------------------------
-
-// // standard dimple svg definition for a responsive chart
-// var svg = dimple.newSvg("#discreteBarChart", "100%", 500);
-// var data = {{ langData | safe }}
-//
-// // for customClassList see http://dimplejs.org/advanced_examples_viewer.html?id=advanced_bars_sketchy
-// var chart = new dimple.chart(svg, data);
-// var xAxis = chart.addCategoryAxis("x", "language");
-// var yAxis = chart.addMeasureAxis("y", "percentage");
-// var mySeries = chart.addSeries("language", dimple.plot.bar);
-// xAxis.fontSize = 14;
-// yAxis.fontSize = 14;
-//
-//   // Draw without any axes
-//   // xAxis.hidden = true;
-//   yAxis.hidden = true;
-//
-//   // Set small margins as there is going to be no axes displayed
-//   chart.setMargins(50, 50, 50, 80);
-//
-//   // Define a custom color palette.  These colours are based on the excellent
-//   // set at http://flatuicolors.com/
-//   chart.defaultColors = [
-//       new dimple.color("#3498db", "#2980b9", 1), // blue
-//       new dimple.color("#e74c3c", "#c0392b", 1), // red
-//       new dimple.color("#2ecc71", "#27ae60", 1), // green
-//       new dimple.color("#9b59b6", "#8e44ad", 1), // purple
-//       new dimple.color("#e67e22", "#d35400", 1), // orange
-//       new dimple.color("#f1c40f", "#f39c12", 1), // yellow
-//       new dimple.color("#1abc9c", "#16a085", 1), // turquoise
-//       new dimple.color("#95a5a6", "#7f8c8d", 1)  // gray
-//   ];
-//
-//   // Set some custom display elements for each series shape
-//   mySeries.afterDraw = function (s, d) {
-//
-//     // I've defined the width in terms of the golden ratio as it seems like the sort
-//     // of thing a designer would do.
-//     var shape = d3.select(s),
-//         goldenRatio = 1.61803398875;
-//
-//     // Add a rectangle to the bar giving a nice style.  The idea was borrowed
-//     // from sirocco's question here:
-//     // http://stackoverflow.com/questions/25044608/dimplejs-barchart-styling-columns
-//     svg.append("rect")
-//       .attr("x", shape.attr("x"))
-//       .attr("y", shape.attr("y"))
-//       .attr("height", shape.attr("height"))
-//       .attr("width", (0.5 * shape.attr("width")) / goldenRatio)
-//       .style("fill", shape.style("stroke"))
-//       .style("opacity", 1)
-//       .style("pointer-events", "none");
-//
-//     // Draw without a border
-//     shape.attr("stroke", shape.attr("fill"));
-//
-//   };
-//
-//   // Override the standard tooltip behaviour
-//     mySeries.addEventHandler("mouseover", function (e){
-//
-//       // Draw the text information in the top left corner
-//       svg.selectAll(".dimple-hover-text")
-//         .data([e.xValue, String(d3.format(",.f")(e.yValue)) + "%"])
-//           .enter()
-//           .append("text")
-//           .attr("class", "dimple-hover-text")
-//           .attr("x", chart._xPixels()  + chart._widthPixels() - 25)
-//           .attr("y", function (d, i) { return chart._yPixels() + 20 + i * 25; })
-//           .style("text-anchor", "end")
-//           .style("font-size", "20px")
-//           .style("fill", chart.getColor(e.xValue).fill)
-//           .style("pointer-events", "none")
-//           .text(function (d) { return d ; } );
-//
-//       // Put a coloured bar next to the text for no good reason
-//       svg.append("rect")
-//         .attr("class", "dimple-hover-text")
-//         .attr("x", chart._xPixels() + chart._widthPixels() - 15)
-//         .attr("y", chart._yPixels())
-//         .attr("height", 60)
-//         .attr("width", 10)
-//         .style("fill", chart.getColor(e.xValue).fill)
-//         .style("opacity", 1)
-//         .style("pointer-events", "none");
-//
-//     });
-//
-//     // Clear the text on exit
-//     mySeries.addEventHandler("mouseleave", function (e) {
-//       svg.selectAll(".dimple-hover-text").remove();
-//     });
-//
-// chart.draw(1000);
-
-// Add a method to draw the chart on resize of the window - currently not
-// working with the custom bar chart styling
-// window.onresize = function () {
-//     // As of 1.1.0 the second parameter here allows you to draw
-//     // without reprocessing data.  This saves a lot on performance
-//     // when you know the data won't have changed.
-//     chart.draw(0, true);
-// };
-
 </script>
+<script src="./static/js/graphs.js"></script>
+
+
 
 
 <script src="./static/lib/js/keen.min.js"></script>

@@ -83,9 +83,10 @@ def main():
     commonLanguages = langFraction.index
     langFraction = langFraction.to_json(orient='records')
     timeLangFraction = getTimeLangFraction(tweets, commonLanguages).to_json(orient='records')
-    # print(timeLangFraction)
+    topSources = json.loads(sourceFraction)
+    print(topSources)
 
-    return render_template("index.html", langData = langFraction, timeLangData = timeLangFraction, sourceData = sourceFraction)
+    return render_template("index.html", langData = langFraction, timeLangData = timeLangFraction, sourceData = sourceFraction, topSources = topSources)
 
 @app.route("/chart")
 def chart():
