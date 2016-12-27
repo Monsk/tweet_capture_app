@@ -67,6 +67,8 @@ body.application hr {
   background: #fbfbfb;
   border-top: 1px solid #e2e2e2;
   color: #808080;
-  font-size: 12px;
-  padding: 8px 10px 5px;
+  font-size: 14px;
+  font-size: 1vw;
+  padding: 0.5px 10px 5px;
+  padding: 0.5vw 0.5vw 0.5vw;
 }

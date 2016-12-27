@@ -25,8 +25,13 @@
 }
 
 .twitter-button {
+  line-height: 2vh;
   color: #808080;
   border: 1px solid #808080;
+  font-size: 14px;
+  font-size: 1vmax;
+  padding: 0.5px 10px 5px;
+  padding: 0.5vw 0.5vw 0.5vw;
 }
 
 .center-wrapper {
