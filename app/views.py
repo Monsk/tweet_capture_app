@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from app import app, db
 from .models import Tweet
 
-tweets = pd.read_csv('tweets.csv')
-# tweets = pd.read_sql('tweet', db.engine)
+# tweets = pd.read_csv('tweets.csv')
+tweets = pd.read_sql('tweet', db.engine)
 
 with open('app/languages.json') as data_file:
     languages = json.load(data_file)
