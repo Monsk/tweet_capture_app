@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from app import app, db
 from .models import Tweet
 
-# tweets = pd.read_csv('tweets.csv')
-tweets = pd.read_sql('tweet', db.engine)
+tweets = pd.read_csv('tweets.csv')
+# tweets = pd.read_sql('tweet', db.engine)
 
 with open('app/languages.json') as data_file:
     languages = json.load(data_file)
@@ -58,7 +58,6 @@ def getTimeLangFraction(tweets, commonLanguages):
     groupTweets['percentage'] = groupTweets.apply(percentage, axis=1)
     groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
     groupTweets = groupTweets[groupTweets.lang.isin(commonLanguages)]
-
     return groupTweets
 
 def getCommonSources(tweets):
@@ -72,18 +71,52 @@ def getCommonSources(tweets):
     sourceFraction = sourceFraction.head(10)
     return sourceFraction
 
+@app.route("/_string_filter", methods=['GET'])
+def getWordFrequency():
+    kw = lambda x: timedelta(days=x.weekday())
+    stringFilter = request.args.get('string', '', type=str)
+
+    datedTweets = tweets
+    datedTweets.occurred_at = pd.DatetimeIndex(datedTweets.occurred_at).normalize()
+    datedTweets['occurred_at_week'] = datedTweets.occurred_at - datedTweets.occurred_at.map(kw)
+    sumTweets = datedTweets.groupby(datedTweets['occurred_at_week']).text.count()
+    filterTweets = datedTweets[datedTweets.text.str.contains(stringFilter)]
+    wordCounts = filterTweets.groupby(filterTweets['occurred_at_week']).text.count()
+
+    wordCounts = wordCounts.reset_index()
+    sumTweets = sumTweets.reset_index()
+
+    wordSummary = wordCounts.merge(sumTweets, left_on='occurred_at_week', right_on='occurred_at_week')
+    wordSummary = wordSummary.rename(columns={'text_x': 'count', 'text_y': 'sum'})
+    wordSummary['percentage'] = (100 * wordSummary['count'] / wordSummary['sum']).round(2)
+    wordSummary.occurred_at_week = wordSummary.occurred_at_week.dt.strftime('%d %b %Y')
+    wordSummary['string'] = stringFilter
+    print(wordSummary.to_json(orient='records'))
+    return wordSummary.to_json(orient='records')
+
 
 @app.route("/")
 def main():
-    langFraction = getLangFraction(tweets)
-    sourceFraction = getCommonSources(tweets).to_json(orient='records')
-    commonLanguages = langFraction.index
-    langFraction = langFraction.to_json(orient='records')
-    timeLangFraction = getTimeLangFraction(tweets, commonLanguages).to_json(orient='records')
-    topSources = json.loads(sourceFraction)
-    print(topSources)
+    inputString = request.args.get('a', 0, type=int)
 
-    return render_template("index.html", langData = langFraction, timeLangData = timeLangFraction, sourceData = sourceFraction, topSources = topSources)
+    langFraction = getLangFraction(tweets)
+    commonLanguages = langFraction.index
+    sourceFraction = getCommonSources(tweets).to_json(orient='records')
+    # wordFrequency = getWordFrequency(tweets, 'brexit').to_json(orient='records')
+    timeLangFraction = getTimeLangFraction(tweets, commonLanguages).to_json(orient='records')
+
+    langFraction = langFraction.to_json(orient='records')
+    topSources = json.loads(sourceFraction)
+    # print(wordFrequency)
+    # print(timeLangFraction)
+
+    return render_template("index.html", langData = langFraction,
+    timeLangData = timeLangFraction,
+    sourceData = sourceFraction,
+    topSources = topSources
+    )
+    # stringMatchData = wordFrequency)
+
 
 @app.route("/chart")
 def chart():
