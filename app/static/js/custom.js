@@ -15,28 +15,55 @@ $(function() {
     $(".btn.active").each(function(i, obj) {
       $(this).toggleClass('active');
     });
-    if ( $('#'+toggle_div_id).is(":visible")){
-      $('#'+toggle_div_id).hide();
+    if ($('#' + toggle_div_id).is(':visible')){
+      console.log('hiding');
+      $('#' + toggle_div_id).hide();
       $("#hide-twitter-content").hide();
       $('html, body').animate({
         scrollTop: $('#tweet-sources').offset().top - 50
       }, 500);
     } else {
-      $('#'+button_id).toggleClass('active');
-      $(".twitter-content").hide();
-      $('#'+toggle_div_id).show();
-      $("#hide-twitter-content").show();
-      $('html, body').animate({
-        scrollTop: $('.chart-notes').offset().top - 50
-      }, 500);
-    }
+      $("#hide-twitter-content").hide();
+      // Hide all visible elements
+      $('.timeline').each(function(i, obj) {
+        $(this).hide();
+      })
+      // If the element exists, show it
+      if ($('#' + toggle_div_id).length){
+        $('#' + toggle_div_id).show()
+        $("#hide-twitter-content").show();
+        $('html, body').animate({
+          scrollTop: $('#tweet-sources').height()
+        }, 500);
+      } else {
+        // If the element doesn't exist, create it
+        $("#hide-twitter-content").before( "<div id=" + toggle_div_id + " class='timeline'><a class='twitter-timeline' data-lang='en' data-height='500' data-theme='light' data-link-color='#2B7BB9' href='https://twitter.com/" + button_id + "'></a><script async src='//platform.twitter.com/widgets.js' charset='utf-8'></script></div>" );
+        $('#' + toggle_div_id).show();
+        if ($('.twitter-timeline').length) {
+          //Timeline exists is it rendered ?
+          interval_timeline = false;
+          interval_timeline = setInterval(function(){
+            if ($('.twitter-timeline').hasClass('twitter-timeline-rendered')) {
+              if ($('.twitter-timeline').height() > 100) {
+                //Callback
+                clearInterval(interval_timeline);
+                $('html, body').animate({
+                  scrollTop: $('#tweet-sources').height()
+                }, 500);
+                $("#hide-twitter-content").show();
+              }
+            }
+          },200);
+        };
+      };
+    };
   });
 });
 
 // Hide button
 $(function() {
   $('#hide-twitter-content').on("click",function(e) {
-    $(".twitter-content").hide();
+    $(".timeline").hide();
     $(this).hide();
     $(".btn.active").each(function(i, obj) {
       $(this).toggleClass('active');
@@ -47,43 +74,28 @@ $(function() {
   })
 })
 
-// Perform AJAX request on the server
+// Perform AJAX request on the server, plot timeStringMatchChart
 $(function() {
   $('a#filterString').bind('click', function() {
     var result = null;
     $.getJSON('/_string_filter', {
       string: $('input[name="string"]').val(),
     })
-      .done(function(data){
-        var stringMatchData = data;
-        $('#timeStringMatchChart').empty();
-        plotStringMatchChart(stringMatchData);
-        $('html, body').animate({
-          scrollTop: $('#timeStringMatchChart').offset().top - 50
-        }, 500);
-      })
-      .fail(function(){
-        console.log('request failed');
-      })
-      .always(function(){
-        console.log('complete');
-      })
-      // Prevents the AJAX request shooting you to the top of the page
-      return false;
-    });
+    .done(function(data){
+      var stringMatchData = data;
+      $('#timeStringMatchChart').empty();
+      plotStringMatchChart(stringMatchData);
+      $('html, body').animate({
+        scrollTop: $('#timeStringMatchChart').offset().top - 50
+      }, 500);
+    })
+    .fail(function(){
+      console.log('request failed');
+    })
+    .always(function(){
+      console.log('complete');
+    })
+    // Prevents the AJAX request shooting you to the top of the page
+    return false;
   });
-
-//   $(function() {
-//     $('a#filterString').bind('click', function() {
-//        $.ajax({
-//           type: "GET",
-//           url: "/_string_filter",
-//           contentType: "application/json; charset=utf-8",
-//           data: { string: $('input[name="string"]').val() },
-//           dataType: "string",
-//           success: function(data) {
-//               $('#echoResult').text(data.value);
-//           }
-//       });
-//   });
-// });
+});

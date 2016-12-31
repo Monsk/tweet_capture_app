@@ -4,10 +4,13 @@
 
 var svg = dimple.newSvg("#timeLangChart", "100%", 500);
 var timeLangChart = new dimple.chart(svg, timeLangData);
-var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%d %b %Y");
+var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b  '%y");
 var y = timeLangChart.addMeasureAxis("y", "percentage");
 var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
 mySeries.lineMarkers = true;
+
+// Chart margins (l, t, r, b)
+timeLangChart.setMargins(60, 30, 30, 30);
 
 // custom tooltips
 mySeries.getTooltipText = function (e) {
@@ -17,7 +20,7 @@ mySeries.getTooltipText = function (e) {
 };
 
 // Axis formatting.
-x.timePeriod = d3.time.weeks;
+x.timePeriod = d3.time.months;
 x.timeInterval = 1;
 x.fontSize = 14;
 y.fontSize = 14;
@@ -60,7 +63,7 @@ xAxis.hidden = true;
 // yAxis.hidden = true;
 
 // Set small margins as there is going to be no axes displayed
-sourceChart.setMargins(150, 50, 20, 20);
+sourceChart.setMargins(150, 30, 20, 20);
 
 // Define a custom color palette.  These colours are based on the excellent
 // set at http://flatuicolors.com/
@@ -150,10 +153,13 @@ var plotStringMatchChart =  function(stringMatchData){
 
   var svg = dimple.newSvg("#timeStringMatchChart", "100%", 500);
   var timeStringMatchChart = new dimple.chart(svg, stringMatchData);
-  var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%d %b %Y");
+  var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b '%Y");
   var y = timeStringMatchChart.addMeasureAxis("y", "percentage");
   var mySeries = timeStringMatchChart.addSeries("string", dimple.plot.line);
   mySeries.lineMarkers = true;
+
+  // Chart margins (l, t, r, b)
+  timeStringMatchChart.setMargins(60, 30, 30, 30);
 
   // custom tooltips
   mySeries.getTooltipText = function (e) {
@@ -163,14 +169,36 @@ var plotStringMatchChart =  function(stringMatchData){
   };
 
   // Axis formatting.
-  x.timePeriod = d3.time.weeks;
+  x.timePeriod = d3.time.months;
   x.timeInterval = 1;
   x.fontSize = 14;
   y.fontSize = 14;
   y.title = "Percentage of tweets";
 
+  //Create Y axis label
+// svg.append("text")
+//     .attr("transform", "rotate(-90)")
+//     .attr("y", 0-margin.left)
+//     .attr("x",0 - (h / 2))
+//     .attr("dy", "1em")
+//     .style("text-anchor", "middle")
+//     .text("Revenue");
+
   timeStringMatchChart.draw(2000);
   x.titleShape.remove();
+  return timeStringMatchChart;
+
+};
+
+// Add a method to draw the chart on resize of the window - currently not
+// working with the custom bar chart styling
+window.onresize = function () {
+    // As of 1.1.0 the second parameter here allows you to draw
+    // without reprocessing data.  This saves a lot on performance
+    // when you know the data won't have changed.
+    // timeStringMatchChart.draw(0, true);
+    timeLangChart.draw(0, true);
+
 };
 
 // ----------------------------------------------------------------------

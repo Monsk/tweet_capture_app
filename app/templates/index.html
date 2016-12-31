@@ -63,27 +63,21 @@
                 <h4>Explore these sources:</h4>
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
                   {% for source in topSources[-10:-5] %}
-                  <label class="btn twitter-button" id="button_{{source['source']}}">
+                  <label class="btn twitter-button" id="{{source['source']}}">
                     <input type="radio" name="options" autocomplete="off">{{ source['source'] }}
                   </label>
                   {% endfor %}
                 </div>
                 <div class="btn-group btn-group-justified" data-toggle="buttons">
                   {% for source in topSources[-5:] %}
-                  <label class="btn twitter-button" id="button_{{source['source']}}">
+                  <label class="btn twitter-button" id="{{source['source']}}">
                     <input type="radio" name="options" autocomplete="off">{{ source['source'] }}
                   </label>
                   {% endfor %}
                 </div>
-                <div class="twitter-timeline" >
-                  {% for source in topSources %}
-                  {% set mystring = "https://twitter.com/" + source['source'] %}
-                  <div id="timeline_button_{{source['source']}}" class="twitter-content">
-                    <a class="twitter-timeline" data-lang="en" data-height="500" data-theme="light" data-link-color="#2B7BB9" href={{ mystring }}>Tweets by {{ source['source'] }}</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-                  </div>
-                  {% endfor %}
-                  <div class="center-wrapper">
-                    <button id="hide-twitter-content" class="btn btn-primary">Hide</button>
+                <div class="twitter-timeline">
+                  <div class="center-wrapper" id="hide-twitter-content">
+                    <button class="btn btn-primary">Hide</button>
                   </div>
                 </div>
               </div>
@@ -145,6 +139,7 @@
 
   <script src="./static/js/graphs.js"></script>
   <script src="./static/lib/js/keen.min.js"></script>
+  <script src="http://platform.twitter.com/widgets.js"</script>
   <!-- <script src='./static/js/graphs.js' type='text/javascript'></script> -->
 </body>
 </html>
