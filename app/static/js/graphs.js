@@ -184,7 +184,7 @@ var plotStringMatchChart =  function(stringMatchData){
 //     .style("text-anchor", "middle")
 //     .text("Revenue");
 
-  timeStringMatchChart.draw(2000);
+  timeStringMatchChart.draw(1000);
   x.titleShape.remove();
   return timeStringMatchChart;
 

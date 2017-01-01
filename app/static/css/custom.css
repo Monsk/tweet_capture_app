@@ -42,6 +42,10 @@
   display: none;
 }
 
+.text-input {
+  padding-bottom: 5px;
+}
+
 
 /**/ Loading ripple
 @-webkit-keyframes uil-ripple {

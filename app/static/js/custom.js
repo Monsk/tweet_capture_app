@@ -1,3 +1,8 @@
+// @TODO:
+// * styling of the submitted search term
+// * Binding UI behaviour to server
+// * Implement addition and removal of chsrt series
+
 // -----------------------
 // String input field behaviour
 // -----------------------
@@ -6,12 +11,12 @@
 var $loading = $('#stringMatchLoadingDiv').hide();
 $(document)
 .ajaxStart(function () {
-  $('#text-input').hide();
+  $('.text-input').hide();
   $loading.show();
 })
 .ajaxStop(function () {
   $loading.hide();
-  $('#text-input').show();
+  $('.text-input').show();
 });
 
 // Perform AJAX request on the server, plot timeStringMatchChart
@@ -23,7 +28,12 @@ $.fn.ajaxStringRequest = function(){
   .done(function(data){
     var stringMatchData = data;
     $('#timeStringMatchChart').empty();
+    $
     plotStringMatchChart(stringMatchData);
+    if( $('#add-text-input').length === 0){
+      $('.text-input').after("<div id='add-text-input' class='pull-right'><a>Add series</a></div>");
+      $.fn.textInputClickBind();
+    }
     $('html, body').animate({
       scrollTop: $('#timeStringMatchChart').offset().top - 50
     }, 500);
@@ -38,23 +48,52 @@ $.fn.ajaxStringRequest = function(){
   return false;
 };
 
-// Hit return to submit
-$(document).ready(function() {
+// Bind requests to a hit of the return key
+$.fn.returnKeyBind = function(){
   $('.text-area').keyup(function(event) {
     if (event.keyCode == 13) {
       $.fn.ajaxStringRequest();
+      $(this).siblings('.filterString').replaceWith("<a href=# class='remove-filter'> X</a>");
+      $(this).siblings('.remove-filter').xclickBind();
+      $(this).replaceWith($('input[name="string"]').val());
       return false;
     }
-  });
-});
+  })
+};
 
-// Click GO to submit
-$(document).ready(function() {
-  $('#filterString').bind('click', function(){
+// Bind requests to GO clicks
+$.fn.goClickBind = function(){
+  $('.filterString').bind('click', function(){
     $.fn.ajaxStringRequest();
+    var parent = $(this).parent();
+    $(this).siblings('.text-area').replaceWith($('input[name="string"]').val());
+    $(this).replaceWith("<a href=# class='remove-filter'> X</a>");
+    parent.children('.remove-filter').xclickBind();
     return false;
   })
+};
+
+// Bind element removal to the X button
+$.fn.xclickBind = function(){
+  $(this).bind('click', function(){
+    $(this).parent().empty();
+    return false;
+  })
+}
+
+// Initial key bindings
+$(document).ready(function() {
+  $.fn.goClickBind();
+  $.fn.returnKeyBind();
 });
+
+// Click 'Add series' and show a new text input
+$.fn.textInputClickBind = function(){
+  $('#add-text-input').bind('click', function(){
+    $('#add-text-input').before("<div class='text-input'>Search term: <input class='text-area' type=text size=10 name=string> <a href=# class='filterString'>GO</a></div>")
+    return false;
+  });
+}
 
 
 // -----------------------
