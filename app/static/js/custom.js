@@ -1,18 +1,67 @@
-var $loading = $('#loadingDiv').hide();
+// -----------------------
+// String input field behaviour
+// -----------------------
+
+// Show the loading icon during ajax request
+var $loading = $('#stringMatchLoadingDiv').hide();
 $(document)
-  .ajaxStart(function () {
-    $('#text-input').hide();
-    $loading.show();
+.ajaxStart(function () {
+  $('#text-input').hide();
+  $loading.show();
+})
+.ajaxStop(function () {
+  $loading.hide();
+  $('#text-input').show();
+});
+
+// Perform AJAX request on the server, plot timeStringMatchChart
+$.fn.ajaxStringRequest = function(){
+  var result = null;
+  $.getJSON('/_string_filter', {
+    string: $('input[name="string"]').val(),
   })
-  .ajaxStop(function () {
-    $loading.hide();
-    $('#text-input').show();
+  .done(function(data){
+    var stringMatchData = data;
+    $('#timeStringMatchChart').empty();
+    plotStringMatchChart(stringMatchData);
+    $('html, body').animate({
+      scrollTop: $('#timeStringMatchChart').offset().top - 50
+    }, 500);
+  })
+  .fail(function(){
+    console.log('request failed');
+  })
+  .always(function(){
+    console.log('complete');
+  })
+  // Prevents the AJAX request shooting you to the top of the page
+  return false;
+};
+
+// Hit return to submit
+$(document).ready(function() {
+  $('.text-area').keyup(function(event) {
+    if (event.keyCode == 13) {
+      $.fn.ajaxStringRequest();
+      return false;
+    }
   });
+});
+
+// Click GO to submit
+$(document).ready(function() {
+  $('#filterString').bind('click', function(){
+    $.fn.ajaxStringRequest();
+    return false;
+  })
+});
+
 
 // -----------------------
 // Twitter content buttons
 // -----------------------
 
+var $twitterLoading = $('#loadingDiv').hide();
 // Buttons
 $(function() {
   // 1. Toggle the active states of the twitter-button
@@ -21,6 +70,7 @@ $(function() {
   $(".twitter-button").on("click",function(e) {
     var button_id = $(this).attr('id');
     var toggle_div_id = 'timeline_' + button_id;
+    $twitterLoading.show();
     e.preventDefault();
 
     $(".btn.active").each(function(i, obj) {
@@ -41,6 +91,7 @@ $(function() {
       })
       // If the element exists, show it
       if ($('#' + toggle_div_id).length){
+        $twitterLoading.hide();
         $('#' + toggle_div_id).show()
         $("#hide-twitter-content").show();
         $('html, body').animate({
@@ -58,6 +109,7 @@ $(function() {
               if ($('.twitter-timeline').height() > 100) {
                 //Callback
                 clearInterval(interval_timeline);
+                $twitterLoading.hide();
                 $('html, body').animate({
                   scrollTop: $('#tweet-sources').height()
                 }, 500);
@@ -84,29 +136,3 @@ $(function() {
     }, 500);
   })
 })
-
-// Perform AJAX request on the server, plot timeStringMatchChart
-$(function() {
-  $('a#filterString').bind('click', function() {
-    var result = null;
-    $.getJSON('/_string_filter', {
-      string: $('input[name="string"]').val(),
-    })
-    .done(function(data){
-      var stringMatchData = data;
-      $('#timeStringMatchChart').empty();
-      plotStringMatchChart(stringMatchData);
-      $('html, body').animate({
-        scrollTop: $('#timeStringMatchChart').offset().top - 50
-      }, 500);
-    })
-    .fail(function(){
-      console.log('request failed');
-    })
-    .always(function(){
-      console.log('complete');
-    })
-    // Prevents the AJAX request shooting you to the top of the page
-    return false;
-  });
-});

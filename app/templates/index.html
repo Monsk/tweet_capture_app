@@ -75,6 +75,7 @@
                   {% endfor %}
                 </div>
                 <div class="twitter-timeline">
+                  <div class="uil-ripple-css" id="loadingDiv" style="margin:0 auto"><div></div><div></div></div>
                   <div class="center-wrapper" id="hide-twitter-content">
                     <button class="btn btn-primary">Hide</button>
                   </div>
@@ -111,10 +112,10 @@
             <div class="chart-options pull-right">
               <div id="text-input">
                 Search term:
-                <input type=text size=10 name=string>
+                <input class="text-area" type=text size=10 name=string>
                 <a href=# id=filterString>GO</a>
               </div>
-              <div class="pull-right uil-ripple-css" id="loadingDiv"><div></div><div></div></div>
+              <div class="uil-ripple-css" id="stringMatchLoadingDiv"><div></div><div></div></div>
             </div>
             <div id="timeStringMatchChart"></div>
           </div>
