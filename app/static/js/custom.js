@@ -1,3 +1,14 @@
+var $loading = $('#loadingDiv').hide();
+$(document)
+  .ajaxStart(function () {
+    $('#text-input').hide();
+    $loading.show();
+  })
+  .ajaxStop(function () {
+    $loading.hide();
+    $('#text-input').show();
+  });
+
 // -----------------------
 // Twitter content buttons
 // -----------------------

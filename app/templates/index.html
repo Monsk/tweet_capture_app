@@ -11,7 +11,6 @@
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css"> -->
   <script src="./static/lib/js/jquery.min.js"></script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script> -->
-  <script src="./static/js/custom.js"></script>
 
 
 </head>
@@ -33,7 +32,7 @@
         <div class="intro-copy">
           <h1>About</h1>
           <p>
-            The purpose of this project is to chronicle the process of Brexit through an analysis of the discourse on Twitter. Every hour 100 tweets referencing Brexit are saved to a database, creating a dataset that is currently over 100 000 tweets in size and growing by 2400 every day. This will continue until the process of Brexit is complete and the UK has left the European Union.
+            The purpose of this project is to chronicle the process of Brexit through an analysis of the discourse on Twitter. Every hour 100 tweets referencing Brexit are saved to a database, creating a dataset that is currently around 200 000 tweets in size and growing by 2400 every day. This will continue until the process of Brexit is complete and the UK has left the European Union.
           </p>
           <p>
             My intention is to keep building out the functionality of the site to enable you to explore the dataset through visualisations. I will be writing occasional blog posts on my findings on <a href="http://www.simonhunter.co/data" target="_blank">my site</a>.
@@ -109,11 +108,14 @@
             <p>
               Search the frequency at which certain keywords are being used in relation to Brexit.
             </p>
-            <p class="chart-options pull-right">
-              Search term:
-              <input type=text size=8 name=string>
-              <a href=# id=filterString>GO</a>
-            </p>
+            <div class="chart-options pull-right">
+              <div id="text-input">
+                Search term:
+                <input type=text size=10 name=string>
+                <a href=# id=filterString>GO</a>
+              </div>
+              <div class="pull-right uil-ripple-css" id="loadingDiv"><div></div><div></div></div>
+            </div>
             <div id="timeStringMatchChart"></div>
           </div>
         </div>
@@ -137,6 +139,7 @@
   var sourceData = {{ sourceData | safe }}
   </script>
 
+  <script src="./static/js/custom.js"></script>
   <script src="./static/js/graphs.js"></script>
   <script src="./static/lib/js/keen.min.js"></script>
   <script src="http://platform.twitter.com/widgets.js"</script>

@@ -153,7 +153,7 @@ var plotStringMatchChart =  function(stringMatchData){
 
   var svg = dimple.newSvg("#timeStringMatchChart", "100%", 500);
   var timeStringMatchChart = new dimple.chart(svg, stringMatchData);
-  var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b '%Y");
+  var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b %y");
   var y = timeStringMatchChart.addMeasureAxis("y", "percentage");
   var mySeries = timeStringMatchChart.addSeries("string", dimple.plot.line);
   mySeries.lineMarkers = true;
