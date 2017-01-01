@@ -79,10 +79,10 @@ def getWordFrequency():
     stringFilter = request.args.get('string', '', type=str)
 
     tweets = pd.read_sql_query("SELECT text, occurred_at from Tweet", db.engine)
+    tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
+    tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
+    sumTweets = tweets.groupby(tweets['occurred_at_week']).text.count()
     filterTweets = tweets[tweets.text.str.contains(stringFilter)]
-    filterTweets.occurred_at = pd.DatetimeIndex(filterTweets.occurred_at).normalize()
-    filterTweets['occurred_at_week'] = filterTweets.occurred_at - filterTweets.occurred_at.map(kw)
-    sumTweets = filterTweets.groupby(filterTweets['occurred_at_week']).text.count()
     wordCounts = filterTweets.groupby(filterTweets['occurred_at_week']).text.count()
 
     wordCounts = wordCounts.reset_index()
