@@ -1,7 +1,7 @@
 // @TODO:
 // * styling of the submitted search term
 // * Binding UI behaviour to server
-// * Implement addition and removal of chsrt series
+// * Implement addition and removal of chart series
 
 // -----------------------
 // String input field behaviour
@@ -22,18 +22,20 @@ $(document)
 // Perform AJAX request on the server, plot timeStringMatchChart
 $.fn.ajaxStringRequest = function(){
   var result = null;
-  $.getJSON('/_string_filter', {
-    string: $('input[name="string"]').val(),
-  })
+  var arr = [];
+  $('input[name="string"]').each(function(i, obj){
+    arr.push($(this).val());
+  });
+  console.log(arr);
+  $.getJSON('/_string_filter', JSON.stringify(arr))
   .done(function(data){
     var stringMatchData = data;
     $('#timeStringMatchChart').empty();
-    $
     plotStringMatchChart(stringMatchData);
-    if( $('#add-text-input').length === 0){
-      $('.text-input').after("<div id='add-text-input' class='pull-right'><a>Add series</a></div>");
-      $.fn.textInputClickBind();
-    }
+    // if( $('.add-text-input').length === 0){
+    //   $('.text-input').after("<div id='add-text-input' class='pull-right'><a>Add series</a></div>");
+    //   $.fn.textInputClickBind();
+    // }
     $('html, body').animate({
       scrollTop: $('#timeStringMatchChart').offset().top - 50
     }, 500);
@@ -53,9 +55,9 @@ $.fn.returnKeyBind = function(){
   $('.text-area').keyup(function(event) {
     if (event.keyCode == 13) {
       $.fn.ajaxStringRequest();
-      $(this).siblings('.filterString').replaceWith("<a href=# class='remove-filter'> X</a>");
+      // $(this).siblings('.filterString').replaceWith("<a href=# class='remove-filter'> X</a>");
       $(this).siblings('.remove-filter').xclickBind();
-      $(this).replaceWith($('input[name="string"]').val());
+      // $(this).replaceWith($('input[name="string"]').val());
       return false;
     }
   })
@@ -66,8 +68,8 @@ $.fn.goClickBind = function(){
   $('.filterString').bind('click', function(){
     $.fn.ajaxStringRequest();
     var parent = $(this).parent();
-    $(this).siblings('.text-area').replaceWith($('input[name="string"]').val());
-    $(this).replaceWith("<a href=# class='remove-filter'> X</a>");
+    // $(this).siblings('.text-area').replaceWith($('input[name="string"]').val());
+    // $(this).replaceWith("<a href=# class='remove-filter'> X</a>");
     parent.children('.remove-filter').xclickBind();
     return false;
   })
@@ -85,12 +87,17 @@ $.fn.xclickBind = function(){
 $(document).ready(function() {
   $.fn.goClickBind();
   $.fn.returnKeyBind();
+  $.fn.textInputClickBind();
 });
 
-// Click 'Add series' and show a new text input
+// Click 'Add series' and show a new text input and remove the 'Add series'
 $.fn.textInputClickBind = function(){
-  $('#add-text-input').bind('click', function(){
-    $('#add-text-input').before("<div class='text-input'>Search term: <input class='text-area' type=text size=10 name=string> <a href=# class='filterString'>GO</a></div>")
+  $('.add-text-input').bind('click', function(){
+    var n = $('.text-area').length + 1;
+    $('.add-text-input').before("<input class='text-area' id='text-area-" + n + "' type=text size=10 name=string>")
+    if (n > 2){
+      $('.add-text-input').remove();
+    }
     return false;
   });
 }

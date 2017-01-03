@@ -76,7 +76,9 @@ def getCommonSources():
 @app.route("/_string_filter", methods=['GET'])
 def getWordFrequency():
     kw = lambda x: timedelta(days=x.weekday())
-    stringFilter = request.args.get('string', '', type=str)
+    stringFilter = str(request.args.getlist('array'))
+    print(stringFilter)
+    print('LOOK AT ME')
 
     tweets = pd.read_sql_query("SELECT text, occurred_at from Tweet", db.engine)
     tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
