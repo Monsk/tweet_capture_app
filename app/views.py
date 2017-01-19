@@ -73,29 +73,32 @@ def getCommonSources():
     sourceFraction = sourceFraction.head(10)
     return sourceFraction
 
-@app.route("/_string_filter", methods=['GET'])
-def getWordFrequency():
+@app.route("/_string_filter", methods=['GET', 'POST'])
+def _string_filter():
     kw = lambda x: timedelta(days=x.weekday())
-    stringFilter = str(request.args.getlist('array'))
-    print(stringFilter)
-    print('LOOK AT ME')
+    stringArray = json.loads(request.args.get('str_arr'))
+    stringArray = filter(None, stringArray)
+    combinedStringStats = pd.DataFrame()
 
     tweets = pd.read_sql_query("SELECT text, occurred_at from Tweet", db.engine)
     tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
     tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
     sumTweets = tweets.groupby(tweets['occurred_at_week']).text.count()
-    filterTweets = tweets[tweets.text.str.contains(stringFilter, case=False)]
-    wordCounts = filterTweets.groupby(filterTweets['occurred_at_week']).text.count()
 
-    wordCounts = wordCounts.reset_index()
-    sumTweets = sumTweets.reset_index()
+    for string in stringArray:
+        filterTweets = tweets[tweets.text.str.contains(string, case=False)]
+        wordCounts = filterTweets.groupby(filterTweets['occurred_at_week']).text.count()
+        wordCounts = wordCounts.reset_index()
+        sumTweets = sumTweets.reset_index()
 
-    wordSummary = wordCounts.merge(sumTweets, left_on='occurred_at_week', right_on='occurred_at_week')
-    wordSummary = wordSummary.rename(columns={'text_x': 'count', 'text_y': 'sum'})
-    wordSummary['percentage'] = (100 * wordSummary['count'] / wordSummary['sum']).round(2)
-    wordSummary.occurred_at_week = wordSummary.occurred_at_week.dt.strftime('%d %b %Y')
-    wordSummary['string'] = stringFilter
-    return wordSummary.to_json(orient='records')
+        wordSummary = wordCounts.merge(sumTweets, left_on='occurred_at_week', right_on='occurred_at_week')
+        wordSummary = wordSummary.rename(columns={'text_x': 'count', 'text_y': 'sum'})
+        wordSummary['percentage'] = (100 * wordSummary['count'] / wordSummary['sum']).round(2)
+        wordSummary.occurred_at_week = wordSummary.occurred_at_week.dt.strftime('%d %b %Y')
+        wordSummary['string'] = string
+        combinedStringStats = combinedStringStats.append(wordSummary)
+
+    return combinedStringStats.to_json(orient='records')
 
 
 @app.route("/")

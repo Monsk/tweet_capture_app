@@ -27,7 +27,8 @@ $.fn.ajaxStringRequest = function(){
     arr.push($(this).val());
   });
   console.log(arr);
-  $.getJSON('/_string_filter', JSON.stringify(arr))
+  console.log({ str_arr: JSON.stringify(arr) });
+  $.getJSON('/_string_filter', { str_arr: JSON.stringify(arr) })
   .done(function(data){
     var stringMatchData = data;
     $('#timeStringMatchChart').empty();
@@ -94,7 +95,7 @@ $(document).ready(function() {
 $.fn.textInputClickBind = function(){
   $('.add-text-input').bind('click', function(){
     var n = $('.text-area').length + 1;
-    $('.add-text-input').before("<input class='text-area' id='text-area-" + n + "' type=text size=10 name=string>")
+    $('.add-text-input').before("<input class='text-area' id='text-area-" + n + "' type=text size=10 name='string'>")
     if (n > 2){
       $('.add-text-input').remove();
     }
