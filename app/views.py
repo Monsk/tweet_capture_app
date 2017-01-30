@@ -116,9 +116,13 @@ def main():
     # print(wordFrequency)
     # print(timeLangFraction)
 
-    return render_template("index.html", langData = langFraction,
+    return render_template("index2.html", langData = langFraction,
     timeLangData = timeLangFraction,
     sourceData = sourceFraction,
     topSources = topSources
     )
     # stringMatchData = wordFrequency)
+
+@app.route("/about")
+def about():
+    return render_template("about.html")

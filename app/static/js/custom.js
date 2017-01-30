@@ -3,6 +3,35 @@
 // * Binding UI behaviour to server
 // * Implement addition and removal of chart series
 
+$('.chart-stage').hide()
+
+$(function() {
+  $(".item").on("click",function(e) {
+    var chart_stage = $(this).siblings('.chart-stage').show();
+    var section_id = $(this).attr('id');
+    if (chart_stage.children('.chart').children().length){
+      chart_stage.children('.chart').children().remove();
+      // $(this).children().hide();
+    } else {
+      switch (section_id) {
+        case 'sources':
+          plotSourceChart(sourceData);
+          break;
+        case 'languages':
+          plotTimeLangChart(timeLangData);
+          break;
+        case 'stringMatch':
+          // plotStringMatchChart(stringMatchData);
+          break;
+      }
+      $('html, body').animate({
+        scrollTop: $(this).offset().top - 50
+      }, 500);
+    }
+  })
+});
+
+
 // -----------------------
 // String input field behaviour
 // -----------------------
@@ -26,8 +55,6 @@ $.fn.ajaxStringRequest = function(){
   $('input[name="string"]').each(function(i, obj){
     arr.push($(this).val());
   });
-  console.log(arr);
-  console.log({ str_arr: JSON.stringify(arr) });
   $.getJSON('/_string_filter', { str_arr: JSON.stringify(arr) })
   .done(function(data){
     var stringMatchData = data;
@@ -38,7 +65,7 @@ $.fn.ajaxStringRequest = function(){
     //   $.fn.textInputClickBind();
     // }
     $('html, body').animate({
-      scrollTop: $('#timeStringMatchChart').offset().top - 50
+      scrollTop: $('#stringMatch').offset().top - 50
     }, 500);
   })
   .fail(function(){
