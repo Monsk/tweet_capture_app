@@ -125,4 +125,5 @@ def main():
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    tweet_count = db.session.query(Tweet).count()
+    return render_template("about.html", tweet_count = tweet_count)

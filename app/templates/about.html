@@ -14,10 +14,12 @@
   <meta property="og:image:secure_url" content="https://www.track-trump.com/images/fb.png">
   <meta property="og:site_name" content="Track Trump">
   <link rel="image_src" href="/images/fb.png">
+  <!-- <script src="./static/lib/css/bootstrap_v3.3.6.min.css"></script> -->
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-  <link rel="stylesheet" href="/stylesheets/linearicons.css">
+  <!-- <link rel="stylesheet" href="/stylesheets/linearicons.css"> -->
   <link rel="stylesheet" href="./static/css/custom.css">
   <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
   <!--if lt IE 7script(src="http://html5shiv.googlecode.com/svn/trunk/html5.js")-->
@@ -40,14 +42,23 @@
     </div>
   </header>
   <div class="container">
-    <h3>Coming soon</h3>
-
+    <section class="about">
+    <p>
+      The purpose of this project is to chronicle the process of Brexit through an analysis of the discourse on Twitter. Every hour 100 tweets referencing Brexit are saved to a database, creating a dataset that currently holds <span class="count">{{ tweet_count }}</span> tweets and grows by 2400 every day. This will continue until the process of Brexit is complete and the UK has left the European Union.
+    </p>
+    <p>
+      My intention is to keep building out the functionality of the site to enable you to explore the dataset through visualisations. I will be writing occasional blog posts on my findings on <a href="http://www.simonhunter.co/data" target="_blank">my site</a>.
+    </p>
+    <p>
+      Any comments or requests, please hit me up: <a href="https://twitter.com/intent/tweet?screen_name=SimonHunter28"  data-show-count="false">@simonhunter28</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </p>
+  </section>
   </div>
-  <div class="share">Share on&nbsp;<a href="https://twitter.com/intent/tweet?source=webclient&amp;amp;text=Tracking+Brexit+on+twitter:+http://brexitweet.com" target="_new" class="fa fa-twitter"></a></div>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="./static/lib/js/jquery.min.js"></script>
+  <script src="./static/lib/js/bootstrap.min.js"></script>
   <!-- <script src="/javascripts/script.js"></script> -->
+  <script src="./static/js/custom.js"></script>
   <script type="text/javascript">/* <![CDATA[ */(function(d,s,a,i,j,r,l,m,t){try{l=d.getElementsByTagName('a');t=d.createElement('textarea');for(i=0;l.length-i;i++){try{a=l[i].href;s=a.indexOf('/cdn-cgi/l/email-protection');m=a.length;if(a&&s>-1&&m>28){j=28+s;s='';if(j<m){r='0x'+a.substr(j,2)|0;for(j+=2;j<m&&a.charAt(j)!='X';j+=2)s+='%'+('0'+('0x'+a.substr(j,2)^r).toString(16)).slice(-2);j++;s=decodeURIComponent(s)+a.substr(j,m-j)}t.innerHTML=s.replace(/</g,'&lt;').replace(/>/g,'&gt;');l[i].href='mailto:'+t.value}}catch(e){}}}catch(e){}})(document);/* ]]> */
   </script>
 </body>

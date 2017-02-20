@@ -102,6 +102,13 @@ body section{
   padding:50px 0 65px;
   font-size:16px;
 }
+body section.about{
+  border-top:none;
+  position:relative;
+  margin-top:0;
+  padding:0;
+  font-size:16px;
+}
 body section p.latest{
   width:auto;
   max-width:100%;
@@ -188,4 +195,56 @@ body section hgroup h2.c1{color:#2bb7ca}body section hgroup h2.c2{color:#f05d5e}
 .item.list:hover{
   background:#fffbdc
 }
-.t-overlay{top:0;left:0;right:0;bottom:0;background:rgba(51,51,51,0.3);position:fixed;display:none}.t-modal{position:absolute;background:#fff;border:1px solid #aaa;-webkit-box-shadow:0 0 7px rgba(0,0,0,0.2);box-shadow:0 0 7px rgba(0,0,0,0.2);border-radius:7px;}.t-modal .item{border-top:0 none}.t-modal .updates{background:#f9f9f9;border-top:1px solid #ddd;border-radius:0 0 6px 6px}.ul-updates{display:block;margin:0;padding:30px 50px;list-style:none;}.ul-updates li{border-top:1px solid #ddd;margin-top:30px;padding-top:30px;}.ul-updates li:first-child{border-top:0 none;margin-top:0;padding-top:0}.dot{width:10px;height:10px;border-radius:100%;background:#e3c100;margin:5px;}.dot.off{background:#ccc}.dot.no{background:#e83a3a}.dot.yes{background:#68b757}.dot.maybe{background:#e8bf11}.CodeMirror,.CodeMirror-scroll{min-height:100px !important}.editor-toolbar.fullscreen{z-index:10000 !important}.roundup h3{font-family:'AbeeZee',Helvetica,sans-serif;margin-top:0;font-size:15px;color:#999;font-weight:normal;margin-bottom:0}.roundup h4{margin-top:10px;font-weight:900;font-size:30px;margin-bottom:15px}.roundup p{line-height:1.5em}.roundup .prev{border:2px solid #ddd;display:inline-block;background:#fff;padding:7px 12px;border-radius:5px;margin-top:10px;color:#333;}.roundup .prev:hover{border-color:#003399;color:#003399;text-decoration:none}.email{color:#003399;border:2px solid #003399;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.email:hover{background:#003399;text-decoration:none;color:#fff}.twitter{color:#65aaf1;border:2px solid #65aaf1;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.twitter:hover{background:#65aaf1;text-decoration:none;color:#fff}.share{position:fixed;bottom:0;left:0;padding:15px 20px;color:#777;position:fixed;bottom:0;left:0;margin:10px;color:#777;border:2px solid #eee;background:#fff;padding:5px 14px;border-radius:5px;font-size:17px;}.share .fa-twitter{color:#65aaf1}.share .fa-facebook{color:#4f61a5}@media (max-width:400px){.share{margin:0;width:100%;background:#fff;border:0 none;-webkit-box-shadow:0 -4px rgba(0,0,0,0.2);box-shadow:0 -4px rgba(0,0,0,0.2);border-radius:0;text-align:center}.share .fa-twitter,.share .fa-facebook{background:#65aaf1;color:#fff;padding:5px;border-radius:5px;margin:0 5px;width:30px;display:inline-block;text-align:center}.share .fa-facebook{background:#4f61a5}}.about{margin:auto;text-align:center;padding:40px 0;color:#999;font-family:'Merriweather',serif;max-width:890px;padding:30px 60px;text-align:center;font-family:'AbeeZee',Helvetica,sans-serif;}.about .icon-feather3{font-size:40px;margin-bottom:25px;margin-left:16px}.about div{margin-bottom:10px}.about a{color:#003399;margin-bottom:7px;}.about a strong{font-weight:900}.about a:hover{color:#333;text-decoration:none;border-bottom:1px solid #999}.twitter-link{color:#999;}.twitter-link:hover{color:#3daaf1;text-decoration:none}.twitter-link i{color:#3daaf1}
+.t-overlay{top:0;left:0;right:0;bottom:0;background:rgba(51,51,51,0.3);position:fixed;display:none}
+.t-modal{position:absolute;background:#fff;border:1px solid #aaa;-webkit-box-shadow:0 0 7px rgba(0,0,0,0.2);box-shadow:0 0 7px rgba(0,0,0,0.2);border-radius:7px;}
+.t-modal .item{border-top:0 none}
+.t-modal .updates{background:#f9f9f9;border-top:1px solid #ddd;border-radius:0 0 6px 6px}
+.ul-updates{display:block;margin:0;padding:30px 50px;list-style:none;}
+.ul-updates li{border-top:1px solid #ddd;margin-top:30px;padding-top:30px;}
+.ul-updates li:first-child{border-top:0 none;margin-top:0;padding-top:0}
+.dot{width:10px;height:10px;border-radius:100%;background:#e3c100;margin:5px;}
+.dot.off{background:#ccc}.dot.no{background:#e83a3a}.dot.yes{background:#68b757}
+.dot.maybe{background:#e8bf11}.CodeMirror,.CodeMirror-scroll{min-height:100px !important}
+.editor-toolbar.fullscreen{z-index:10000 !important}
+.about h3{
+  font-family:'AbeeZee',Helvetica,sans-serif;
+  margin-top:0;
+  font-size:15px;
+  color:#999;
+  font-weight:normal;
+  margin-bottom:0;
+}
+.about h4{
+  margin-top:10px;
+  font-weight:900;
+  font-size:30px;
+  margin-bottom:15px;
+}
+.about p{
+  line-height:1.5em;
+}
+.about .prev{
+  border:2px solid #ddd;
+  display:inline-block;
+  background:#fff;
+  padding:7px 12px;
+  border-radius:5px;
+  margin-top:10px;
+  color:#333;
+}
+.about .prev:hover{
+  border-color:#003399;
+  color:#003399;
+  text-decoration:none;
+}
+.email{color:#003399;border:2px solid #003399;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.email:hover{background:#003399;text-decoration:none;color:#fff}.twitter{color:#65aaf1;border:2px solid #65aaf1;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.twitter:hover{background:#65aaf1;text-decoration:none;color:#fff}.share{position:fixed;bottom:0;left:0;padding:15px 20px;color:#777;position:fixed;bottom:0;left:0;margin:10px;color:#777;border:2px solid #eee;background:#fff;padding:5px 14px;border-radius:5px;font-size:17px;}.share .fa-twitter{color:#65aaf1}.share .fa-facebook{color:#4f61a5}@media (max-width:400px){.share{margin:0;width:100%;background:#fff;border:0 none;-webkit-box-shadow:0 -4px rgba(0,0,0,0.2);box-shadow:0 -4px rgba(0,0,0,0.2);border-radius:0;text-align:center}.share .fa-twitter,.share .fa-facebook{background:#65aaf1;color:#fff;padding:5px;border-radius:5px;margin:0 5px;width:30px;display:inline-block;text-align:center}.share .fa-facebook{background:#4f61a5}}
+/*.about{margin:auto;
+  text-align:center;
+  padding:40px 0;
+  color:#999;
+  font-family:'Merriweather',serif;max-width:890px;
+  padding:30px 60px;
+  text-align:center;
+  font-family:'AbeeZee',Helvetica,sans-serif;
+}*/
+.about .icon-feather3{font-size:40px;margin-bottom:25px;margin-left:16px}.about div{margin-bottom:10px}.about a{color:#003399;margin-bottom:7px;}.about a strong{font-weight:900}.about a:hover{color:#333;text-decoration:none;border-bottom:1px solid #999}.twitter-link{color:#999;}.twitter-link:hover{color:#3daaf1;text-decoration:none}.twitter-link i{color:#3daaf1}

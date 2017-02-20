@@ -1,16 +1,18 @@
 // @TODO:
 // * styling of the submitted search term
 // * Binding UI behaviour to server
-// * Implement addition and removal of chart series
 
 $('.chart-stage').hide()
 
+// Show or hide the chart when the title is clicked
 $(function() {
   $(".item").on("click",function(e) {
     var chart_stage = $(this).siblings('.chart-stage').show();
     var section_id = $(this).attr('id');
+    // if (chart_stage.children('.chart').children().length){
     if (chart_stage.children('.chart').children().length){
       chart_stage.children('.chart').children().remove();
+      chart_stage.hide();
       // $(this).children().hide();
     } else {
       switch (section_id) {
@@ -210,3 +212,20 @@ $(function() {
     }, 500);
   })
 })
+
+
+/// General functions ///
+
+// Number counter
+$(document)
+$('.count').each(function () {
+    $(this).prop('Counter',0).animate({
+        Counter: $(this).text()
+    }, {
+        duration: 4000,
+        easing: 'swing',
+        step: function (now) {
+            $(this).text(Math.ceil(now));
+        }
+    });
+});
