@@ -104,6 +104,18 @@ var plotSourceChart =  function(sourceData){
     // Draw without a border
     shape.attr("stroke", shape.attr("fill"));
 
+    d3.selectAll("text")
+    .filter(function(d){return typeof(d) == "string";})
+    .style("cursor", "pointer")
+    .each(function(d){
+      $(this).attr("id", d).attr("class", "twitter-button").attr("data-toggle", "modal").attr("data-target", "#myModal");})
+    .on("click",toggleTwitterContent);
+
+    d3.selectAll("rect")
+    .style("cursor", "pointer")
+    .each(function(d){
+      $(this).attr("id", String($(this).attr("id")).split("__")[0]).attr("class", "twitter-button").attr("data-toggle", "modal").attr("data-target", "#myModal");})
+    .on("click",toggleTwitterContent);
   };
   // custom tooltips
   mySeries.getTooltipText = function (e) {

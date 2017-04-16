@@ -237,7 +237,26 @@ body section hgroup h2.c1{color:#2bb7ca}body section hgroup h2.c2{color:#f05d5e}
   color:#003399;
   text-decoration:none;
 }
-.email{color:#003399;border:2px solid #003399;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.email:hover{background:#003399;text-decoration:none;color:#fff}.twitter{color:#65aaf1;border:2px solid #65aaf1;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.twitter:hover{background:#65aaf1;text-decoration:none;color:#fff}.share{position:fixed;bottom:0;left:0;padding:15px 20px;color:#777;position:fixed;bottom:0;left:0;margin:10px;color:#777;border:2px solid #eee;background:#fff;padding:5px 14px;border-radius:5px;font-size:17px;}.share .fa-twitter{color:#65aaf1}.share .fa-facebook{color:#4f61a5}@media (max-width:400px){.share{margin:0;width:100%;background:#fff;border:0 none;-webkit-box-shadow:0 -4px rgba(0,0,0,0.2);box-shadow:0 -4px rgba(0,0,0,0.2);border-radius:0;text-align:center}.share .fa-twitter,.share .fa-facebook{background:#65aaf1;color:#fff;padding:5px;border-radius:5px;margin:0 5px;width:30px;display:inline-block;text-align:center}.share .fa-facebook{background:#4f61a5}}
+.email{color:#003399;border:2px solid #003399;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.email:hover{background:#003399;text-decoration:none;color:#fff}.twitter{color:#65aaf1;border:2px solid #65aaf1;border-radius:5px;padding:7px 10px;margin-top:15px;margin-bottom:10px;text-align:center;font-size:14px;display:inline-block;}.twitter:hover{background:#65aaf1;text-decoration:none;color:#fff}
+.share{
+  position:fixed;
+  bottom:0;
+  left:0;
+  padding:15px 20px;
+  color:#777;
+  position:fixed;
+  bottom:0;
+  left:0;
+  margin:10px;
+  color:#777;
+  border:2px solid #eee;
+  background:#fff;
+  padding:5px 14px;
+  border-radius:5px;
+  font-size:17px;
+}
+
+  .share .fa-twitter{color:#65aaf1}.share .fa-facebook{color:#4f61a5}@media (max-width:400px){.share{margin:0;width:100%;background:#fff;border:0 none;-webkit-box-shadow:0 -4px rgba(0,0,0,0.2);box-shadow:0 -4px rgba(0,0,0,0.2);border-radius:0;text-align:center}.share .fa-twitter,.share .fa-facebook{background:#65aaf1;color:#fff;padding:5px;border-radius:5px;margin:0 5px;width:30px;display:inline-block;text-align:center}.share .fa-facebook{background:#4f61a5}}
 /*.about{margin:auto;
   text-align:center;
   padding:40px 0;

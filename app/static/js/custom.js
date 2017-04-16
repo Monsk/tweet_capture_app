@@ -136,68 +136,58 @@ $.fn.textInputClickBind = function(){
 // -----------------------
 // Twitter content buttons
 // -----------------------
+var toggleTwitterContent = function(d){
+  var button_id = $(this).attr('id');
+  var toggle_div_id = 'timeline_' + button_id;
+  console.log(button_id);
 
-var $twitterLoading = $('#loadingDiv').hide();
-// Buttons
-$(function() {
-  // 1. Toggle the active states of the twitter-button
-  // 2. Show the relevant content
-  // 3. Scroll to the top of the open content
-  $(".twitter-button").on("click",function(e) {
-    var button_id = $(this).attr('id');
-    var toggle_div_id = 'timeline_' + button_id;
+  // d.preventDefault();
+
+  if ($('#' + toggle_div_id).is(':visible')){
+    console.log('hiding');
+    $('#' + toggle_div_id).hide();
+    $("#hide-twitter-content").hide();
+    $('html, body').animate({
+      scrollTop: $("#sources").offset().top - 50
+    }, 500);
+  } else {
     $twitterLoading.show();
-    e.preventDefault();
-
-    $(".btn.active").each(function(i, obj) {
-      $(this).toggleClass('active');
-    });
-    if ($('#' + toggle_div_id).is(':visible')){
-      console.log('hiding');
-      $('#' + toggle_div_id).hide();
-      $("#hide-twitter-content").hide();
-      $('html, body').animate({
-        scrollTop: $('#tweet-sources').offset().top - 50
-      }, 500);
+    // $("#hide-twitter-content").hide();
+    // Hide all visible elements
+    $('.timeline').each(function(i, obj) {
+      $(this).hide();
+    })
+    // If the element exists, show it
+    if ($('#' + toggle_div_id).length){
+      console.log('showing content');
+      $twitterLoading.hide();
+      $('#' + toggle_div_id).show()
+      // $("#hide-twitter-content").show();
     } else {
-      $("#hide-twitter-content").hide();
-      // Hide all visible elements
-      $('.timeline').each(function(i, obj) {
-        $(this).hide();
-      })
-      // If the element exists, show it
-      if ($('#' + toggle_div_id).length){
-        $twitterLoading.hide();
-        $('#' + toggle_div_id).show()
-        $("#hide-twitter-content").show();
-        $('html, body').animate({
-          scrollTop: $('#tweet-sources').height()
-        }, 500);
-      } else {
-        // If the element doesn't exist, create it
-        $("#hide-twitter-content").before( "<div id=" + toggle_div_id + " class='timeline'><a class='twitter-timeline' data-lang='en' data-height='500' data-theme='light' data-link-color='#2B7BB9' href='https://twitter.com/" + button_id + "'></a><script async src='//platform.twitter.com/widgets.js' charset='utf-8'></script></div>" );
-        $('#' + toggle_div_id).show();
-        if ($('.twitter-timeline').length) {
-          //Timeline exists is it rendered ?
-          interval_timeline = false;
-          interval_timeline = setInterval(function(){
-            if ($('.twitter-timeline').hasClass('twitter-timeline-rendered')) {
-              if ($('.twitter-timeline').height() > 100) {
-                //Callback
-                clearInterval(interval_timeline);
-                $twitterLoading.hide();
-                $('html, body').animate({
-                  scrollTop: $('#tweet-sources').height()
-                }, 500);
-                $("#hide-twitter-content").show();
-              }
+      // If the element doesn't exist, create it
+      console.log('creating content');
+      $("#hide-twitter-content").before( "<div id=" + toggle_div_id + " class='timeline'><a class='twitter-timeline' data-lang='en' data-height='500' data-theme='light' data-link-color='#2B7BB9' href='https://twitter.com/" + button_id + "'></a><script async src='//platform.twitter.com/widgets.js' charset='utf-8'></script></div>" );
+      $('#' + toggle_div_id).show();
+      if ($('.twitter-timeline').length) {
+        //Timeline exists is it rendered ?
+        interval_timeline = false;
+        interval_timeline = setInterval(function(){
+          if ($('.twitter-timeline').hasClass('twitter-timeline-rendered')) {
+            if ($('#' + toggle_div_id).height() > 100) {
+              //Callback
+              clearInterval(interval_timeline);
+              $twitterLoading.hide();
             }
-          },200);
-        };
+          }
+        },200);
       };
     };
-  });
-});
+  };
+};
+
+
+
+var $twitterLoading = $('#loadingDiv').hide();
 
 // Hide button
 $(function() {
@@ -208,7 +198,7 @@ $(function() {
       $(this).toggleClass('active');
     });
     $('html, body').animate({
-      scrollTop: $('#tweet-sources').offset().top - 50
+      scrollTop: $("#sources").offset().top - 50
     }, 500);
   })
 })
