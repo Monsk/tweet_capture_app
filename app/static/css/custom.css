@@ -46,15 +46,18 @@
   padding-bottom: 5px;
 }
 
-.add-text-input {
+/*.add-text-input {
   padding-left: 2px;
-}
+}*/
 
-.text-area {
+/*.text-area {
   margin-left: 2px;
   margin-right: 2px;
-}
+}*/
 
+.label {
+  font-weight:normal;
+}
 
 /**/ Loading ripple
 @-webkit-keyframes uil-ripple {

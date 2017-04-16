@@ -7,14 +7,17 @@ $('.chart-stage').hide()
 // Show or hide the chart when the title is clicked
 $(function() {
   $(".item").on("click",function(e) {
-    var chart_stage = $(this).siblings('.chart-stage').show();
+    // var chart_stage = $(this).siblings('.chart-stage').show();
+    var chart_stage = $(this).siblings('.chart-stage');
     var section_id = $(this).attr('id');
+
+    if (chart_stage.is(':visible')){
     // if (chart_stage.children('.chart').children().length){
-    if (chart_stage.children('.chart').children().length){
-      chart_stage.children('.chart').children().remove();
+      chart_stage. children('.chart').children().remove();
       chart_stage.hide();
       // $(this).children().hide();
     } else {
+      chart_stage.show();
       switch (section_id) {
         case 'sources':
           plotSourceChart(sourceData);
@@ -124,7 +127,9 @@ $(document).ready(function() {
 $.fn.textInputClickBind = function(){
   $('.add-text-input').bind('click', function(){
     var n = $('.text-area').length + 1;
-    $('.add-text-input').before("<input class='text-area' id='text-area-" + n + "' type=text size=10 name='string'>")
+    // $('.add-text-input').before("<input class='text-area' id='text-area-" + n + "' type=text size=10 name='string'>")
+    $('#StringMatchBtnGroup').before("<input class='text-area form-control mb-2 mr-sm-2 mb-sm-0' id='text-area-" + n + "' type=text size=10 name='string'>")
+
     if (n > 2){
       $('.add-text-input').remove();
     }

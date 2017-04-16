@@ -77,42 +77,44 @@
         <div class="chart"  id="sourceBarChart">
         </div>
       </div>
-</section>
+    </section>
 
-<section><i class="icon c2 icon-ship2"></i>
-  <div class="item list off" id="languages">
-    <hgroup><h2 class="c2">European interest</h2></hgroup>
-  </div>
-  <div class="chart-stage">
-    <div class="chart" id="timeLangChart"></div>
-  </div>
-</section>
-
-<section><i class="icon c3 icon-fan"></i>
-  <div class="item list off" id="stringMatch">
-    <hgroup><h2 class="c3">The evolving focus</h2></hgroup>
-  </div>
-  <div class="chart-stage">
-    <p>
-      Search the frequency at which certain keywords are being used in relation to Brexit.
-    </p>
-    <div class="chart-options">
-      <div class=" form-group text-input" id="text-input-1">
-        Search term:
-        <input class="text-area" id="text-area-1" type=text size=10 name="string">
-        <span class="add-text-input"><a>Add series</a></span>
-        <span class="filterString pull-right"><a href="">GO</a></span>
+    <section><i class="icon c2 icon-ship2"></i>
+      <div class="item list off" id="languages">
+        <hgroup><h2 class="c2">European interest</h2></hgroup>
       </div>
-      <div class="uil-ripple-css" id="stringMatchLoadingDiv"><div></div><div></div></div>
-    </div>
-    <div class="chart" id="timeStringMatchChart"></div>
+      <div class="chart-stage">
+        <div class="chart" id="timeLangChart"></div>
+      </div>
+    </section>
+
+    <section><i class="icon c3 icon-fan"></i>
+      <div class="item list off" id="stringMatch">
+        <hgroup><h2 class="c3">The evolving focus</h2></hgroup>
+      </div>
+      <div class="chart-stage">
+        <p>
+          Search the frequency at which certain keywords are being used in relation to Brexit.
+        </p>
+        <div class="chart-options">
+          <form class="form-inline">
+            Search term:
+            <input class="text-area form-control mb-2 mr-sm-2 mb-sm-0" id="text-area-1" type=text size=10 name="string" placeholder="e.g. pound">
+            <div class="btn-group" role="group" id="StringMatchBtnGroup">
+              <button type="button" class="btn btn-default add-text-input">Add term</button>
+              <button type="button" class="btn btn-default filterString"><strong>GO</strong></button>
+            </div>
+          </form>
+          <div class="uil-ripple-css" id="stringMatchLoadingDiv"><div></div><div></div></div>
+        </div>
+        <div class="chart" id="timeStringMatchChart"></div>
+      </div>
+    </section>
+    <!--
+    <section><i class="icon c4 icon-fan"></i>
+    <div class="item list off">
+    <hgroup><h2 class="c4">things &amp; more things</h2></hgroup>
   </div>
-</section>
-<!--
-<section><i class="icon c4 icon-fan"></i>
-<div class="item list off">
-<hgroup><h2 class="c4">things &amp; more things</h2></hgroup>
-</div>
 </section> -->
 
 </div>
