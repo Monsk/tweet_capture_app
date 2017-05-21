@@ -10,7 +10,6 @@ import logging
 # Create a Flask WSGI app and configure it using values from the module, and secret keys from instance/config.
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
-app.config.from_pyfile('config.py')
 cache = pylibmc.Client(["127.0.0.1"], binary=True)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -49,4 +48,4 @@ if os.environ.get('HEROKU') is not None:
                           'dead_timeout': 30,
                         })
 else:
-    cache = pylibmc.Client(["127.0.0.1"], binary=True)
+    print('running locally')
