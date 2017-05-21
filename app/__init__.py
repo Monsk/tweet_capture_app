@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template
 # from werkzeug.contrib.cache import MemcachedCache
 from flask_cache import Cache
-# import pylibmc
+import pylibmc
 from flask_sqlalchemy import SQLAlchemy
 import sys
 import logging
@@ -12,7 +12,7 @@ import logging
 app = Flask(__name__)
 app.config.from_object('config')
 
-app.config['CACHE_TYPE'] = 'memcached'
+app.config['CACHE_TYPE'] = 'saslmemcached'
 app.config.setdefault('CACHE_MEMCACHED_SERVERS',
         ['mc3.dev.eu.ec2.memcachier.com:11211'])
 app.config.setdefault('CACHE_MEMCACHED_USERNAME',
