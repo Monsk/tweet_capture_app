@@ -57,32 +57,36 @@ def getTimeLangFraction(commonLanguages):
     Returns on the most common languages as defined in getLangFraction
     """
 
-    kw = lambda x: timedelta(days=x.weekday())
-    def percentage(x):
-        percentage = 100 * float(x['count']) / float(ggTweets[ggTweets.index == x["occurred_at_week"]][0])
-        return round(percentage, 3)
+    timeLangFraction = cache.get('timeLangFraction')
+    if timeLangFraction is None:
+        kw = lambda x: timedelta(days=x.weekday())
+        def percentage(x):
+            percentage = 100 * float(x['count']) / float(ggTweets[ggTweets.index == x["occurred_at_week"]][0])
+            return round(percentage, 3)
 
-    tweets = pd.read_sql_query("SELECT lang, occurred_at from Tweet", db.engine)
-    tweets = tweets[tweets['lang'].isin(euro_languages.keys())]
-    tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
-    tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
-    groupTweets = tweets.groupby([tweets['occurred_at_week'], 'lang']).lang.count()
-    groupTweets.rename('count', inplace=True)
-    groupTweets = groupTweets.reset_index()
-    groupTweets['language'] = [languages[x] for x in groupTweets.lang]
+        tweets = pd.read_sql_query("SELECT lang, occurred_at from Tweet", db.engine)
+        tweets = tweets[tweets['lang'].isin(euro_languages.keys())]
+        tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
+        tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
+        groupTweets = tweets.groupby([tweets['occurred_at_week'], 'lang']).lang.count()
+        groupTweets.rename('count', inplace=True)
+        groupTweets = groupTweets.reset_index()
+        groupTweets['language'] = [languages[x] for x in groupTweets.lang]
 
-    ggTweets = groupTweets.groupby('occurred_at_week')['count'].sum()
+        ggTweets = groupTweets.groupby('occurred_at_week')['count'].sum()
 
-    groupTweets['percentage'] = groupTweets.apply(percentage, axis=1)
-    groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
-    groupTweets = groupTweets[groupTweets.lang.isin(commonLanguages)]
-    return groupTweets
+        groupTweets['percentage'] = groupTweets.apply(percentage, axis=1)
+        groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
+        timeLangFraction = groupTweets[groupTweets.lang.isin(commonLanguages)]
+        cache.set('timeLangFraction', timeLangFraction)
+
+    return timeLangFraction
 
 def getCommonSources():
     """
     Extract the tweet sources, count them, and then turn the counter dict into a list of tuples
     """
-    
+
     sourceFraction = cache.get('sourceFraction')
     if sourceFraction is None:
         print('calculating sourceFraction')
@@ -138,8 +142,6 @@ def main():
 
     langFraction = langFraction.to_json(orient='records')
     topSources = json.loads(sourceFraction)
-    # print(wordFrequency)
-    # print(timeLangFraction)
 
     return render_template("index2.html", langData = langFraction,
     timeLangData = timeLangFraction,
