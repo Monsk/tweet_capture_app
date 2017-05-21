@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-api = TwitterAPI(cons_key, cons_sec, app_tok, app_sec)
+api = TwitterAPI(CONS_KEY, cons_sec, APP_TOK, APP_SEC)
 
 # r = api.request('statuses/filter', {'track':'brexit'})
 # for item in r:

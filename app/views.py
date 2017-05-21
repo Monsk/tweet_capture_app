@@ -4,7 +4,7 @@ from flask import (Flask, flash, Markup, redirect, render_template, request,
                    Response, session, url_for)
 from datetime import datetime, timedelta
 
-from app import app, db
+from app import app, db, cache
 from .models import Tweet
 
 # tweets = pd.read_csv('tweets.csv')
@@ -15,7 +15,6 @@ with open('app/languages.json') as data_file:
 
 with open('app/euro_languages.json') as data_file:
     euro_languages = json.load(data_file)
-
 
 def getTZoneFraction(tweets):
     # Extract the timezones, count them, and then turn the counter dict into a list of tuples
@@ -31,17 +30,24 @@ def getTZoneFraction(tweets):
     return tzoneFraction
 
 def getLangFraction():
-    # Extract the languages, count them, and then turn the counter dict into a list of tuples
-    langs = pd.read_sql_query("SELECT lang from Tweet", db.engine).iloc[:,0].dropna()
-    langs = langs[langs.isin(euro_languages.keys())]
-    langCounter = pd.DataFrame(langs.value_counts())
-    langFraction = 100 * langCounter / langCounter.sum()
-    langFraction = langFraction.round(3)
-    # Convert iso codes into language names
-    langFraction['language'] = [languages[x] for x in langFraction.index]
-    langFraction = langFraction.rename(columns={'lang': 'percentage'})
-    # Remove English and undefined languages, return the top 10 remaining
-    langFraction = langFraction[~langFraction.index.isin(['en','und'])].head(5)
+    """
+    Extract the languages, count them, and then turn the counter dict into a list of tuples
+    """
+
+    langFraction = cache.get('langFraction')
+    if langFraction is None:
+        print('calculating langFraction')
+        langs = pd.read_sql_query("SELECT lang from Tweet", db.engine).iloc[:,0].dropna()
+        langs = langs[langs.isin(euro_languages.keys())]
+        langCounter = pd.DataFrame(langs.value_counts())
+        langFraction = 100 * langCounter / langCounter.sum()
+        langFraction = langFraction.round(3)
+        # Convert iso codes into language names
+        langFraction['language'] = [languages[x] for x in langFraction.index]
+        langFraction = langFraction.rename(columns={'lang': 'percentage'})
+        # Remove English and undefined languages, return the top 10 remaining
+        langFraction = langFraction[~langFraction.index.isin(['en','und'])].head(5)
+        cache.set('langFraction', langFraction)
 
     return langFraction
 
@@ -73,15 +79,23 @@ def getTimeLangFraction(commonLanguages):
     return groupTweets
 
 def getCommonSources():
-    # Extract the tweet sources, count them, and then turn the counter dict into a list of tuples
-
-    sources = pd.read_sql_query("SELECT source_user_screen_name from Tweet", db.engine).iloc[:,0].dropna()
-    sourceCounter = pd.DataFrame(sources.value_counts())
-    sourceFraction = 100 * sourceCounter / sourceCounter.sum()
-    sourceFraction = sourceFraction.round(3)
-    sourceFraction = sourceFraction.reset_index()
-    sourceFraction = sourceFraction.rename(columns={'source_user_screen_name': 'percentage', 'index': 'source'})
-    sourceFraction = sourceFraction.head(10)
+    """
+    Extract the tweet sources, count them, and then turn the counter dict into a list of tuples
+    """
+    
+    sourceFraction = cache.get('sourceFraction')
+    if sourceFraction is None:
+        print('calculating sourceFraction')
+        sources = pd.read_sql_query("SELECT source_user_screen_name from Tweet", db.engine).iloc[:,0].dropna()
+        sourceCounter = pd.DataFrame(sources.value_counts())
+        sourceFraction = 100 * sourceCounter / sourceCounter.sum()
+        sourceFraction = sourceFraction.round(3)
+        sourceFraction = sourceFraction.reset_index()
+        sourceFraction = sourceFraction.rename(columns={'source_user_screen_name': 'percentage', 'index': 'source'})
+        sourceFraction = sourceFraction.head(10)
+        cache.set('sourceFraction', sourceFraction)
+    else:
+        print('pulling sourceFraction from cache')
     return sourceFraction
 
 @app.route("/_string_filter", methods=['GET', 'POST'])

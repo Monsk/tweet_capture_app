@@ -5,6 +5,9 @@ venv/
 *.pyc
 .DS_Store
 
+instance/
+
 sqlite.db
 tweets.csv
 twitter_listener.py
+.env
