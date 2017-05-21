@@ -12,14 +12,7 @@ import logging
 app = Flask(__name__)
 app.config.from_object('config')
 
-app.config['CACHE_TYPE'] = 'saslmemcached'
-app.config.setdefault('CACHE_MEMCACHED_SERVERS',
-        ['mc3.dev.eu.ec2.memcachier.com:11211'])
-app.config.setdefault('CACHE_MEMCACHED_USERNAME',
-        '106E96')
-app.config.setdefault('CACHE_MEMCACHED_PASSWORD',
-        '6D67CCAB7F19976F6345C88F0D8AD507')
-
+app.config['CACHE_TYPE'] = 'simple'
 cache = Cache(app, app.config)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -35,3 +28,11 @@ if os.environ.get('HEROKU') is not None:
     app.logger.addHandler(stream_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info('website startup')
+    app.config['CACHE_TYPE'] = 'saslmemcached'
+    app.config.setdefault('CACHE_MEMCACHED_SERVERS',
+            [os.environ['MEMCACHIER_SERVERS']])
+    app.config.setdefault('CACHE_MEMCACHED_USERNAME',
+            os.environ['MEMCACHIER_USERNAME'])
+    app.config.setdefault('CACHE_MEMCACHED_PASSWORD',
+            os.environ['MEMCACHIER_PASSWORD'])
+    cache = Cache(app, app.config)
