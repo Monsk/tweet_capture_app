@@ -13,6 +13,8 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 app.config['CACHE_TYPE'] = 'simple'
+# Set the cache timeout to 3 days
+app.config['CACHE_DEFAULT_TIMEOUT'] = (60*60*24*3)
 cache = Cache(app, app.config)
 
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
