@@ -47,3 +47,21 @@ class Tweet(db.Model):
 
     def __repr__(self):
         return '<Tweet {}>'.format(self.text.encode('utf-8'))
+
+class ComputedData(db.Model):
+    # """Table for storing computed data that will be used for plotting"""
+    __tablename__ = 'computedData'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    dataTitle = db.Column(db.String)
+    jsonData = db.Column(db.String)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.now)
+
+    def __str__(self):
+        """Return the title of the data"""
+        return self.dataTitle
+
+    def get_json_data(self):
+        return json.loads(self.jsonData)
+
+    def __repr__(self):
+        return self.dataTitle
