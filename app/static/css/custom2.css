@@ -267,3 +267,8 @@ body section hgroup h2.c1{color:#2bb7ca}body section hgroup h2.c2{color:#f05d5e}
   font-family:'AbeeZee',Helvetica,sans-serif;
 }*/
 .about .icon-feather3{font-size:40px;margin-bottom:25px;margin-left:16px}.about div{margin-bottom:10px}.about a{color:#003399;margin-bottom:7px;}.about a strong{font-weight:900}.about a:hover{color:#333;text-decoration:none;border-bottom:1px solid #999}.twitter-link{color:#999;}.twitter-link:hover{color:#3daaf1;text-decoration:none}.twitter-link i{color:#3daaf1}
+
+.chart {
+  width: 100%;
+  height: 500px;
+}

@@ -2,40 +2,35 @@
 // * styling of the submitted search term
 // * Binding UI behaviour to server
 
-$('.chart-stage').hide()
+// -----------------------
+// Chart plotting and showing
+// -----------------------
 
-// Show or hide the chart when the title is clicked
-$(function() {
-  $(".item").on("click",function(e) {
-    // var chart_stage = $(this).siblings('.chart-stage').show();
-    var chart_stage = $(this).siblings('.chart-stage');
-    var section_id = $(this).attr('id');
+$('.card').each(function(i, obj){
+  // Add a listener to a chart area being shown
+  $(this).on('shown.bs.collapse', function (e) {
+    const targetChart = e.target.lastElementChild.id;
 
-    if (chart_stage.is(':visible')){
-    // if (chart_stage.children('.chart').children().length){
-      chart_stage. children('.chart').children().remove();
-      chart_stage.hide();
-      // $(this).children().hide();
-    } else {
-      chart_stage.show();
-      switch (section_id) {
-        case 'sources':
-          plotSourceChart(sourceData);
-          break;
-        case 'languages':
-          plotTimeLangChart(timeLangData);
-          break;
-        case 'stringMatch':
-          // plotStringMatchChart(stringMatchData);
-          break;
-      }
-      $('html, body').animate({
-        scrollTop: $(this).offset().top - 50
-      }, 500);
-    }
+    // if the chart doesn't exist, draw it!
+    if ($('#' + targetChart).children().length === 0) {
+      switch(targetChart){
+        case 'sourceBarChart':
+        plotSourceChart(sourceData);
+        break;
+        case 'timeLangChart':
+        plotTimeLangChart(timeLangData);
+        break;
+        default:
+        break;
+      };
+    };
+
+    // scroll to the top of the chart
+    $('html, body').animate({
+      scrollTop: $('#' + targetChart).parent().parent().offset().top - 50
+    }, 500);
   })
-});
-
+})
 
 // -----------------------
 // String input field behaviour
@@ -214,13 +209,13 @@ $(function() {
 // Number counter
 $(document)
 $('.count').each(function () {
-    $(this).prop('Counter',0).animate({
-        Counter: $(this).text()
-    }, {
-        duration: 4000,
-        easing: 'swing',
-        step: function (now) {
-            $(this).text(Math.ceil(now));
-        }
-    });
+  $(this).prop('Counter',0).animate({
+    Counter: $(this).text()
+  }, {
+    duration: 4000,
+    easing: 'swing',
+    step: function (now) {
+      $(this).text(Math.ceil(now));
+    }
+  });
 });

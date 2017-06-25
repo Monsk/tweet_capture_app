@@ -49,7 +49,7 @@ var plotTimeLangChart = function(timeLangData){
 var plotSourceChart =  function(sourceData){
 
   // standard dimple svg definition for a responsive chart
-  var svg = dimple.newSvg("#sourceBarChart", "100%", 500);
+  var svg = dimple.newSvg("#sourceBarChart", '100%', 500);
 
   // for customClassList see http://dimplejs.org/advanced_examples_viewer.html?id=advanced_bars_sketchy
   var sourceChart = new dimple.chart(svg, sourceData);

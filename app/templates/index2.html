@@ -63,12 +63,17 @@
       </div>
     </div>
   </header>
-  <div class="container">
+
+  <div class="container" id="accordion" role="tablist" aria-multiselectable="true">
+
     <section><i class="icon c1 icon-wall"></i>
-      <div class="item list off" id="sources">
-        <hgroup><h2 class="c1">Most vocal sources</h2></hgroup>
+      <div class="card">
+      <div class="item list off collapsed" id="sources" data-toggle="collapse" data-parent="#accordion" href="#sourceBarChartStage" aria-expanded="false" aria-controls="sourceBarChartStage">
+        <hgroup><h2 class="c1">
+            Most vocal sources
+        </h2></hgroup>
       </div>
-      <div class="chart-stage">
+      <div id="sourceBarChartStage" class="chart-stage collapse">
         <div class="text-center">
           <p>
             Click the data to see the Twitter stream.
@@ -77,22 +82,30 @@
         <div class="chart"  id="sourceBarChart">
         </div>
       </div>
+    </div>
     </section>
 
     <section><i class="icon c2 icon-ship2"></i>
-      <div class="item list off" id="languages">
-        <hgroup><h2 class="c2">European interest</h2></hgroup>
+      <div class="card">
+      <div class="item list off collapsed" id="languages" data-toggle="collapse" data-parent="#accordion" href="#timeLangChartStage" aria-expanded="false" aria-controls="timeLangChartStage">
+        <hgroup><h2 class="c2">
+            European interest
+        </h2></hgroup>
       </div>
-      <div class="chart-stage">
+      <div id="timeLangChartStage" class="chart-stage collapse">
         <div class="chart" id="timeLangChart"></div>
       </div>
+    </div class="card">
     </section>
 
     <section><i class="icon c3 icon-fan"></i>
-      <div class="item list off" id="stringMatch">
-        <hgroup><h2 class="c3">The evolving focus</h2></hgroup>
+      <div class="card">
+      <div class="item list off collapsed" id="stringMatch"  data-toggle="collapse" data-parent="#accordion" href="#stringMatchStage" aria-expanded="false" aria-controls="stringMatchStage">
+        <hgroup><h2 class="c3">
+          The evolving focus
+        </h2></hgroup>
       </div>
-      <div class="chart-stage">
+      <div id="stringMatchStage" class="chart-stage collapse">
         <p>
           Search the frequency at which certain keywords are being used in relation to Brexit.
         </p>
@@ -109,13 +122,8 @@
         </div>
         <div class="chart" id="timeStringMatchChart"></div>
       </div>
+    </div>
     </section>
-    <!--
-    <section><i class="icon c4 icon-fan"></i>
-    <div class="item list off">
-    <hgroup><h2 class="c4">things &amp; more things</h2></hgroup>
-  </div>
-</section> -->
 
 </div>
 <div class="share">Share on&nbsp;<a href="https://twitter.com/intent/tweet?source=webclient&amp;amp;text=Tracking+Brexit+on+twitter:+http://brexitweet.com" target="_new" class="fa fa-twitter"></a></div>
