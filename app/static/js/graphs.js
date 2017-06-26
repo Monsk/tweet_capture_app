@@ -120,44 +120,9 @@ var plotSourceChart =  function(sourceData){
   // custom tooltips
   mySeries.getTooltipText = function (e) {
     return [
-      e.xValue + ' %'
+      Math.round(e.xValue * 100)/100 + ' %'
     ];
   };
-  // // Override the standard tooltip behaviour
-  //   mySeries.addEventHandler("mouseover", function (e){
-  //     console.log(e)
-  //
-  //     // Draw the text information in the top left corner
-  //     svg.selectAll(".dimple-hover-text")
-  //       .data([e.yValue, String(d3.format(".f")(e.aggField)) + "%"])
-  //         .enter()
-  //         .append("text")
-  //         .attr("class", "dimple-hover-text")
-  //         .attr("x", sourceChart._xPixels() + sourceChart._widthPixels() - 25)
-  //         .attr("y", function (d, i) { return sourceChart._yPixels() + sourceChart._heightPixels() - 50 + i * 25; })
-  //         .style("text-anchor", "end")
-  //         .style("font-size", "20px")
-  //         .style("fill", sourceChart.getColor(e.yValue).fill)
-  //         .style("pointer-events", "none")
-  //         .text(function (d) { return d ; } );
-  //
-  //     // Put a coloured bar next to the text for no good reason
-  //     svg.append("rect")
-  //       .attr("class", "dimple-hover-text")
-  //       .attr("x", sourceChart._xPixels() + sourceChart._widthPixels() - 15)
-  //       .attr("y", sourceChart._yPixels() + sourceChart._heightPixels() - 70)
-  //       .attr("height", 60)
-  //       .attr("width", 10)
-  //       .style("fill", sourceChart.getColor(e.yValue).fill)
-  //       .style("opacity", 1)
-  //       .style("pointer-events", "none");
-  //
-  //   });
-  //
-  //   // Clear the text on exit
-  //   mySeries.addEventHandler("mouseleave", function (e) {
-  //     svg.selectAll(".dimple-hover-text").remove();
-  //   });
 
   sourceChart.draw(1000);
 };
@@ -207,16 +172,6 @@ var plotStringMatchChart =  function(stringMatchData){
 
 };
 
-// Add a method to draw the chart on resize of the window - currently not
-// working with the custom bar chart styling
-window.onresize = function () {
-    // As of 1.1.0 the second parameter here allows you to draw
-    // without reprocessing data.  This saves a lot on performance
-    // when you know the data won't have changed.
-    // timeStringMatchChart.draw(0, true);
-    timeLangChart.draw(0, true);
-
-};
 
 // ----------------------------------------------------------------------
 // LANGUAGE BAR CHART
