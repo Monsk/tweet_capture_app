@@ -21,9 +21,9 @@ body:before{
 body .image{
   display:block;
   width:366px;
-  height:269px;
+  height:230px;
   background-image:url("../img/brexit-suitcase.png");
-  background-size: 366px 269px;
+  background-size: 366px 230px;
   background-repeat: no-repeat;
   margin:auto;
   margin:50px auto 15px
@@ -41,6 +41,12 @@ body .image{
     -moz-background-size:366px 220px;
     background-size:366px 220px
     }
+}
+@media (max-width: 380px){
+  body .image{
+    width:100%;
+    background-size: 100%;
+  }
 }
 body .about-link{
   color:#003399;
