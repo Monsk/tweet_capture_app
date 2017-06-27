@@ -2,6 +2,8 @@
 """Built upon this tutorial https://jeffknupp.com/blog/2014/01/31/a-python-app-to-see-what-people-are-saying-about-you/ """
 
 import datetime
+from textblob import TextBlob
+import re
 
 # from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 # from sqlalchemy.orm import relationship, backref
@@ -28,6 +30,7 @@ class Tweet(db.Model):
     user_screen_name = db.Column(db.String)
     source_user_id = db.Column(db.String)
     source_user_screen_name = db.Column(db.String)
+    sentiment_score = db.Column(db.Float)
     recorded_at = db.Column(db.DateTime, default=datetime.datetime.now)
     occurred_at = db.Column(db.DateTime, default=datetime.datetime.now)
 
@@ -44,6 +47,23 @@ class Tweet(db.Model):
                 'time_zone': self.time_zone,
                 'recorded_at': str(self.recorded_at),
                 'occurred_at': str(self.occurred_at)}
+
+    def clean_tweet(self):
+        '''
+        Utility function to clean tweet text by removing links, special characters
+        using simple regex statements.
+        '''
+        return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", self.text).split())
+
+    def get_tweet_sentiment(self):
+        '''
+        Utility function to classify sentiment of passed tweet
+        using textblob's sentiment method
+        '''
+        # create TextBlob object of passed tweet text
+        analysis = TextBlob(self.clean_tweet())
+        # set sentiment
+        return analysis.sentiment.polarity
 
     def __repr__(self):
         return '<Tweet {}>'.format(self.text.encode('utf-8'))
