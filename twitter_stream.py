@@ -2,6 +2,7 @@ from TwitterAPI import TwitterAPI, TwitterError
 from config import *
 import pprint
 import datetime
+from textblob import TextBlob
 
 from app.models import Tweet
 from app import db
@@ -30,7 +31,7 @@ class twitter_listener():
                     if 'text' in item:
 
                         print(self.counter)
-                        pprint.pprint(item)
+                        # pprint.pprint(item)
 
                         self.counter += 1
 
@@ -57,6 +58,9 @@ class twitter_listener():
                         for element in item["entities"]["urls"]:
                             # @TODO: store all the urls in the list, not just the last one
                             tweet.url_link = element["expanded_url"]
+
+                        tweet.sentiment_score = tweet.get_tweet_sentiment()
+                        print(tweet.sentiment_score)
 
                         try:
                             db.session.add(tweet)

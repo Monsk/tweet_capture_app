@@ -5,9 +5,10 @@ from flask_script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
 from app import app, db
-from app.models import ComputedData
+from app.models import ComputedData, Tweet
 from twitter_stream import twitter_listener
 from analysis_functions import getCommonSources, getTimeLangFraction
+from textblob import TextBlob
 
 import datetime
 
@@ -49,6 +50,11 @@ def compute_plot_data():
     saveComputedData('sourceFraction', getCommonSources(db))
     saveComputedData('timeLangFraction', getTimeLangFraction(db))
 
+@manager.command
+def compute_sentiment_scores():
+    for tweet in db.session.query(Tweet):
+        tweet.sentiment_score = tweet.get_tweet_sentiment()
+    db.session.commit()
 
 if __name__ == "__main__":
     manager.run()
