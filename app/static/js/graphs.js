@@ -6,8 +6,12 @@ var plotTimeLangChart = function(timeLangData){
   var timeLangChart = new dimple.chart(svg, timeLangData);
   var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b  '%y");
   var y = timeLangChart.addMeasureAxis("y", "percentage");
+
   var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
-  mySeries.lineMarkers = true;
+
+
+  // Toggle data points here
+  mySeries.lineMarkers = false;
 
   // Chart margins (l, t, r, b)
   timeLangChart.setMargins(60, 30, 30, 30);
@@ -138,7 +142,9 @@ var plotStringMatchChart =  function(stringMatchData){
   var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b %y");
   var y = timeStringMatchChart.addMeasureAxis("y", "percentage");
   var mySeries = timeStringMatchChart.addSeries("string", dimple.plot.line);
-  mySeries.lineMarkers = true;
+
+  // Toggle data points here
+  mySeries.lineMarkers = false;
 
   // Chart margins (l, t, r, b)
   timeStringMatchChart.setMargins(60, 30, 30, 30);
