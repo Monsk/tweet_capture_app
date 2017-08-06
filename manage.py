@@ -5,12 +5,16 @@ from flask_script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
 from app import app, db
-from app.models import ComputedData, Tweet
+from app.models import ComputedData, Tweet, WordCounts
 from twitter_stream import twitter_listener
 from analysis_functions import getCommonSources, getTimeLangFraction
 from textblob import TextBlob
 
+from collections import Counter
+import re, string, json
+
 import datetime
+from datetime import timedelta
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -33,8 +37,7 @@ def saveComputedData(name, data):
     if (db.session.query(ComputedData.dataTitle).filter_by(dataTitle=name).scalar() is None):
         computedData = ComputedData(
             dataTitle = name,
-            jsonData = data.to_json(orient='records'),
-            updated_at = datetime.datetime.now()
+            jsonData = data.to_json(orient='records')
         )
         db.session.add(computedData)
         db.session.commit()
@@ -55,6 +58,49 @@ def compute_sentiment_scores():
     for tweet in db.session.query(Tweet):
         tweet.sentiment_score = tweet.get_tweet_sentiment()
     db.session.commit()
+
+@manager.command
+def count_tweet_words():
+    todays_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > datetime.datetime.now() - timedelta(days=1) )
+
+    combined_string = ''
+
+    for tweet in todays_tweets:
+        # select retweet_text if the text is a retweet
+        if tweet.retweet_text is None:
+            combined_string = combined_string + tweet.text
+        else:
+            combined_string = combined_string + tweet.retweet_text
+
+    # remove all punctuation and convert to lower case
+    combined_string = re.sub('([^\s\w]|_)+', '', combined_string.lower())
+    word_counts = sorted(Counter(combined_string.split()).items())
+
+    existing_words = db.session.query(WordCounts.word)
+    n=0
+    for word_count in word_counts:
+        word = word_count[0]
+        # if the word does not exist in the table, add it
+        if (db.session.query(WordCounts.word).filter_by(word=word).scalar() is None):
+            new_word = WordCounts(
+                word = word,
+                frequencyData = json.dumps([{'date':datetime.datetime.now().strftime("%Y-%m-%d"), 'count':word_count[1]}])
+            )
+            # db.session.add(new_word)
+            # db.session.commit()
+            print( word + ' added to the database')
+            n=n+1
+            if n > 5:
+                return
+        else:
+            wordCount = WordCounts.query.filter_by(word=word).first()
+            # frequencyData = json.loads(wordCount.frequencyData)
+            wordCount.frequencyData.update({'date':datetime.datetime.now().strftime("%Y-%m-%d"), 'count':word_count[1]})
+
+
+    # iterate through the dict items, find the word in the table and add today's data to the json, or create a new entry
+
+
 
 if __name__ == "__main__":
     manager.run()

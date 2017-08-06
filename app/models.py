@@ -85,3 +85,21 @@ class ComputedData(db.Model):
 
     def __repr__(self):
         return self.dataTitle
+
+class WordCounts(db.Model):
+    # """Table for storing the time series of the frequencies of words tweeted"""
+    __tablename__ = 'wordCounts'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    word = db.Column(db.String)
+    frequencyData = db.Column(db.String)
+    updated_at = db.Column(db.DateTime, default=datetime.datetime.now)
+
+    def __str__(self):
+        """Return the title of the data"""
+        return self.word
+
+    def get_json_data(self):
+        return json.loads(self.jsonData)
+
+    def __repr__(self):
+        return self.word
