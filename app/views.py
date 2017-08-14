@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from app import app, db
 from .models import Tweet, ComputedData
 
+from analysis_functions import getSentimentScores
+
 # tweets = pd.read_csv('tweets.csv')
 # tweets = pd.read_sql('tweet', db.engine)
 
@@ -56,10 +58,12 @@ def main():
 
     timeLangFraction = ComputedData.query.filter_by(dataTitle='timeLangFraction').first().jsonData
     sourceFraction = ComputedData.query.filter_by(dataTitle='sourceFraction').first().jsonData
+    sentimentData = getSentimentScores(db).to_json(orient='records')
 
     return render_template("index.html",
     timeLangData = timeLangFraction,
-    sourceData = sourceFraction
+    sourceData = sourceFraction,
+    sentimentData = sentimentData
     )
 
 @app.route("/about")

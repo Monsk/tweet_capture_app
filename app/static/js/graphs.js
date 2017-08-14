@@ -1,4 +1,29 @@
 // ----------------------------------------------------------------------
+// SENTIMENT OVER TIME SCATTER PLOT
+// ----------------------------------------------------------------------
+var plotSentimentChart = function(sentimentData){
+  console.log(sentimentData);
+  var svg = dimple.newSvg("#sentimentChart", "100%", 500);
+  var sentimentChart = new dimple.chart(svg, sentimentData);
+  var x = sentimentChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b  '%y");
+  var y = sentimentChart.addMeasureAxis("y", "sentiment_score");
+
+  var mySeries = sentimentChart.addSeries("sentiment_score", dimple.plot.bubble);
+
+  // Axis formatting.
+  x.timePeriod = d3.time.months;
+  x.timeInterval = 1;
+  x.fontSize = 14;
+  y.fontSize = 14;
+  y.title = "Sentiment score";
+
+  sentimentChart.draw(1000);
+  x.titleShape.remove();
+
+}
+
+
+// ----------------------------------------------------------------------
 // COMMON LANGUAGES OVER TIME LINE CHART
 // ----------------------------------------------------------------------
 var plotTimeLangChart = function(timeLangData){

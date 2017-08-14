@@ -20,6 +20,9 @@ $('.card').each(function(i, obj){
         case 'timeLangChart':
         plotTimeLangChart(timeLangData);
         break;
+        case 'sentimentChart':
+        plotSentimentChart(sentimentData);
+        break;
         default:
         break;
       };

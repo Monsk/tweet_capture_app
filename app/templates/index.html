@@ -64,6 +64,20 @@
 
   <div class="container" id="accordion" role="tablist" aria-multiselectable="true">
 
+
+    <section><i class="icon c4"></i>
+      <div class="card">
+      <div class="item list off collapsed" id="sentiment" data-toggle="collapse" data-parent="#accordion" href="#sentimentChartStage" aria-expanded="false" aria-controls="sentimentChartStage">
+        <hgroup><h2 class="c4">
+            Sentiment
+        </h2></hgroup>
+      </div>
+      <div id="sentimentChartStage" class="chart-stage collapse">
+        <div class="chart" id="sentimentChart"></div>
+      </div>
+    </div class="card">
+    </section>
+
     <section><i class="icon c1 icon-wall"></i>
       <div class="card">
       <div class="item list off collapsed" id="sources" data-toggle="collapse" data-parent="#accordion" href="#sourceBarChartStage" aria-expanded="false" aria-controls="sourceBarChartStage">
@@ -139,6 +153,7 @@
 <script>
 var timeLangData = {{ timeLangData | safe }}
 var sourceData = {{ sourceData | safe }}
+var sentimentData = {{ sentimentData | safe }}
 </script>
 
 <script src="./static/js/custom.js"></script>

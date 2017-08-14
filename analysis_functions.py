@@ -73,3 +73,27 @@ def getTimeLangFraction(db):
     timeLangFraction = groupTweets[groupTweets.lang.isin(commonLanguages)]
 
     return timeLangFraction
+
+def getSentimentScores(db):
+    kw = lambda x: timedelta(days=x.weekday())
+
+    sentiment_scores = pd.read_sql_query("SELECT sentiment_score, occurred_at from Tweet", db.engine)
+    sentiment_scores.occurred_at = pd.DatetimeIndex(sentiment_scores.occurred_at).normalize()
+    sentiment_scores['occurred_at_week'] = sentiment_scores.occurred_at - sentiment_scores.occurred_at.map(kw)
+    sentiment_scores.occurred_at_week = sentiment_scores.occurred_at_week.dt.strftime('%d %b %Y')
+
+    weekScores = sentiment_scores.groupby('occurred_at_week')['sentiment_score'].sum()
+    weekScores.rename('score', inplace=True)
+    weekScores = weekScores.reset_index()
+    weekScores['individual_scores'] = ''
+    print(weekScores)
+
+    for week in weekScores.occurred_at_week:
+        # WIP: tyring to cast individual scores into an array to store in the weekScores dataframe, to then turn into a json structure
+        individual_scores = [sentiment_scores.sentiment_score[sentiment_scores.occurred_at_week == week]]
+        print(individual_scores)
+        weekScores.individual_scores[weekScores.occurred_at_week == week] = individual_scores
+
+    print(weekScores)
+
+    return sentiment_scores
