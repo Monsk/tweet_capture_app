@@ -22,6 +22,8 @@ def getCommonSources(db):
     sourceFraction = sourceFraction.rename(columns={'source_user_screen_name': 'percentage', 'index': 'source'})
     sourceFraction = sourceFraction.head(10)
 
+    sourceFraction = sourceFraction.to_json(orient='records')
+
     return sourceFraction
 
 def getLangFraction(db):
@@ -72,28 +74,34 @@ def getTimeLangFraction(db):
     groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
     timeLangFraction = groupTweets[groupTweets.lang.isin(commonLanguages)]
 
+    timeLangFraction = timeLangFraction.to_json(orient='records')
     return timeLangFraction
 
 def getSentimentScores(db):
     kw = lambda x: timedelta(days=x.weekday())
 
+    print('calculating sentimentScores')
     sentiment_scores = pd.read_sql_query("SELECT sentiment_score, occurred_at from Tweet", db.engine)
     sentiment_scores.occurred_at = pd.DatetimeIndex(sentiment_scores.occurred_at).normalize()
     sentiment_scores['occurred_at_week'] = sentiment_scores.occurred_at - sentiment_scores.occurred_at.map(kw)
     sentiment_scores.occurred_at_week = sentiment_scores.occurred_at_week.dt.strftime('%d %b %Y')
+    sentiment_scores.rename(index=str, columns={"sentiment_score": "Score", "occurred_at_week": "Date"}, inplace=True)
 
-    weekScores = sentiment_scores.groupby('occurred_at_week')['sentiment_score'].sum()
-    weekScores.rename('score', inplace=True)
+    weekScores = sentiment_scores.groupby('Date')['Score'].mean()
+    # weekScores.rename('Score', inplace=True)
     weekScores = weekScores.reset_index()
-    weekScores['individual_scores'] = ''
-    print(weekScores)
+#     weekScores['individual_scores'] = ''
 
-    for week in weekScores.occurred_at_week:
-        # WIP: tyring to cast individual scores into an array to store in the weekScores dataframe, to then turn into a json structure
-        individual_scores = [sentiment_scores.sentiment_score[sentiment_scores.occurred_at_week == week]]
-        print(individual_scores)
-        weekScores.individual_scores[weekScores.occurred_at_week == week] = individual_scores
+#     for week in weekScores.occurred_at_week:
+#         # Cast individual scores into an array to store in the weekScores dataframe
+#         individual_scores = sentiment_scores.sentiment_score[sentiment_scores.occurred_at_week == week].values
+#         dfRow = weekScores.loc[weekScores.occurred_at_week == week].index[0]
+#         weekScores.set_value(dfRow, 'individual_scores', individual_scores)
 
-    print(weekScores)
+    # Convert to json
+    weekScores = weekScores.to_json(orient='records')
+    individualScores = sentiment_scores.to_json(orient='records')
+
+    sentiment_scores = str([{"weekScores": weekScores, "individualScores": individualScores}])
 
     return sentiment_scores

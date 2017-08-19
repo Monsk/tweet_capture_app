@@ -7,7 +7,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 from app import app, db
 from app.models import ComputedData, Tweet, WordCounts
 from twitter_stream import twitter_listener
-from analysis_functions import getCommonSources, getTimeLangFraction
+from analysis_functions import getCommonSources, getTimeLangFraction, getSentimentScores
 from textblob import TextBlob
 
 from collections import Counter
@@ -33,17 +33,18 @@ def saveComputedData(name, data):
     Save the computed data as a json string in the ComputedData table
     If the data object doesn't exist, create it; otherwise, update it
     """
-
+    # If object doesn't exist, create
     if (db.session.query(ComputedData.dataTitle).filter_by(dataTitle=name).scalar() is None):
         computedData = ComputedData(
             dataTitle = name,
-            jsonData = data.to_json(orient='records')
+            jsonData = data
         )
         db.session.add(computedData)
         db.session.commit()
+    # If object does exist, update
     else:
         computedData = ComputedData.query.filter_by(dataTitle=name).first()
-        computedData.jsonData = data.to_json(orient='records')
+        computedData.jsonData = data
         computedData.updated_at = datetime.datetime.now()
         db.session.commit()
     return
@@ -52,6 +53,7 @@ def saveComputedData(name, data):
 def compute_plot_data():
     saveComputedData('sourceFraction', getCommonSources(db))
     saveComputedData('timeLangFraction', getTimeLangFraction(db))
+    saveComputedData('sentimentScore', getSentimentScores(db))
 
 @manager.command
 def compute_sentiment_scores():

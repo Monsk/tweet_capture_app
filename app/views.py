@@ -58,7 +58,7 @@ def main():
 
     timeLangFraction = ComputedData.query.filter_by(dataTitle='timeLangFraction').first().jsonData
     sourceFraction = ComputedData.query.filter_by(dataTitle='sourceFraction').first().jsonData
-    sentimentData = getSentimentScores(db).to_json(orient='records')
+    sentimentData = ComputedData.query.filter_by(dataTitle='sentimentScore').first().jsonData
 
     return render_template("index.html",
     timeLangData = timeLangFraction,

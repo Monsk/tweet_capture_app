@@ -1,24 +1,40 @@
+
 // ----------------------------------------------------------------------
 // SENTIMENT OVER TIME SCATTER PLOT
 // ----------------------------------------------------------------------
 var plotSentimentChart = function(sentimentData){
-  console.log(sentimentData);
+  var weekScores = JSON.parse(sentimentData[0].weekScores);
+  var eachScores = JSON.parse(sentimentData[0].individualScores);
+  console.table(weekScores);
   var svg = dimple.newSvg("#sentimentChart", "100%", 500);
-  var sentimentChart = new dimple.chart(svg, sentimentData);
-  var x = sentimentChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b  '%y");
-  var y = sentimentChart.addMeasureAxis("y", "sentiment_score");
+  var sentimentChart = new dimple.chart(svg);
+  var x = sentimentChart.addTimeAxis("x", "Date", "%d %b %Y", "%b  '%y");
+  var y = sentimentChart.addMeasureAxis("y", "Score");
+  y.tickFormat = ",.2f";
 
-  var mySeries = sentimentChart.addSeries("sentiment_score", dimple.plot.bubble);
+  var scoreSeries = sentimentChart.addSeries(null, dimple.plot.line);
+  scoreSeries.data = weekScores;
+  // var pointSeries = sentimentChart.addSeries("Score", dimple.plot.bubble);
+  // pointSeries.data = eachScores;
+
+  // custom tooltips
+  scoreSeries.getTooltipText = function (e) {
+    return [
+      'Polarity: ' + d3.format(",.3f")(e.yValue)
+    ];
+  };
 
   // Axis formatting.
   x.timePeriod = d3.time.months;
   x.timeInterval = 1;
   x.fontSize = 14;
   y.fontSize = 14;
-  y.title = "Sentiment score";
+  y.title = "Sentiment Polarity";
 
   sentimentChart.draw(1000);
   x.titleShape.remove();
+  // Setting the tickFormat after the chart is drawn will only affect tooltips
+
 
 }
 
