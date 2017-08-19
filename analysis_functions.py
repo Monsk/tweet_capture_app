@@ -88,20 +88,12 @@ def getSentimentScores(db):
     sentiment_scores.rename(index=str, columns={"sentiment_score": "Score", "occurred_at_week": "Date"}, inplace=True)
 
     weekScores = sentiment_scores.groupby('Date')['Score'].mean()
-    # weekScores.rename('Score', inplace=True)
     weekScores = weekScores.reset_index()
-#     weekScores['individual_scores'] = ''
-
-#     for week in weekScores.occurred_at_week:
-#         # Cast individual scores into an array to store in the weekScores dataframe
-#         individual_scores = sentiment_scores.sentiment_score[sentiment_scores.occurred_at_week == week].values
-#         dfRow = weekScores.loc[weekScores.occurred_at_week == week].index[0]
-#         weekScores.set_value(dfRow, 'individual_scores', individual_scores)
 
     # Convert to json
     weekScores = weekScores.to_json(orient='records')
-    individualScores = sentiment_scores.to_json(orient='records')
+    # individualScores = sentiment_scores.to_json(orient='records')
 
-    sentiment_scores = str([{"weekScores": weekScores, "individualScores": individualScores}])
+    # sentiment_scores = str([{"weekScores": weekScores, "individualScores": individualScores}])
 
-    return sentiment_scores
+    return weekScores
