@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import load_only
 from flask_script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -58,13 +59,16 @@ def compute_plot_data():
 @manager.command
 def compute_sentiment_scores():
     n=0
-    for tweet in db.session.query(Tweet):
-        if tweet.sentiment_score is None:
-            tweet.sentiment_score = tweet.get_tweet_sentiment()
-            db.session.commit()
-            n = n + 1
-            if n % 100 == 0:
-                print(n)
+    tableRows = db.session.query(Tweet).count()
+    batchSize = 1000
+    print(tableRows)
+    for n in xrange(0, tableRows, batchSize):
+        print(n)
+        for tweet in db.session.query(Tweet)[n:n+batchSize-1]:
+            if tweet.sentiment_score is None:
+                tweet.sentiment_score = tweet.get_tweet_sentiment()
+                db.session.commit()
+
 
 @manager.command
 def count_tweet_words():
