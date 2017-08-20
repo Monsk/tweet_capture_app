@@ -3,10 +3,7 @@
 // SENTIMENT OVER TIME SCATTER PLOT
 // ----------------------------------------------------------------------
 var plotSentimentChart = function(sentimentData){
-  // var weekScores = JSON.parse(sentimentData[0].weekScores);
-  // var eachScores = JSON.parse(sentimentData[0].individualScores);
-  // console.table(weekScores);
-  console.table(sentimentData);
+
   var svg = dimple.newSvg("#sentimentChart", "100%", 500);
   var sentimentChart = new dimple.chart(svg);
   var x = sentimentChart.addTimeAxis("x", "Date", "%d %b %Y", "%b  '%y");
@@ -15,8 +12,6 @@ var plotSentimentChart = function(sentimentData){
 
   var scoreSeries = sentimentChart.addSeries(null, dimple.plot.line);
   scoreSeries.data = sentimentData;
-  // var pointSeries = sentimentChart.addSeries("Score", dimple.plot.bubble);
-  // pointSeries.data = eachScores;
 
   // custom tooltips
   scoreSeries.getTooltipText = function (e) {
@@ -34,8 +29,6 @@ var plotSentimentChart = function(sentimentData){
 
   sentimentChart.draw(1000);
   x.titleShape.remove();
-  // Setting the tickFormat after the chart is drawn will only affect tooltips
-
 
 }
 
