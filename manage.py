@@ -57,8 +57,11 @@ def compute_plot_data():
 
 @manager.command
 def compute_sentiment_scores():
+    n=0
     for tweet in db.session.query(Tweet):
         tweet.sentiment_score = tweet.get_tweet_sentiment()
+        n=n+1
+        print(n)
     db.session.commit()
 
 @manager.command
