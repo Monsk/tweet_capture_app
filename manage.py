@@ -67,7 +67,7 @@ def compute_sentiment_scores():
         for tweet in db.session.query(Tweet)[n:n+batchSize-1]:
             if tweet.sentiment_score is None:
                 tweet.sentiment_score = tweet.get_tweet_sentiment()
-                db.session.commit()
+        db.session.commit()
 
 
 @manager.command
