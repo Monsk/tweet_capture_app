@@ -59,10 +59,12 @@ def compute_plot_data():
 def compute_sentiment_scores():
     n=0
     for tweet in db.session.query(Tweet):
-        tweet.sentiment_score = tweet.get_tweet_sentiment()
-        n=n+1
-        print(n)
-    db.session.commit()
+        if tweet.sentiment_score is None:
+            tweet.sentiment_score = tweet.get_tweet_sentiment()
+            db.session.commit()
+            n = n + 1
+            if n % 100 == 0:
+                print(n)
 
 @manager.command
 def count_tweet_words():
