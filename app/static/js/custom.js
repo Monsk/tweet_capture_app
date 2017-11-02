@@ -9,8 +9,7 @@
 $('.card').each(function(i, obj){
   // Add a listener to a chart area being shown
   $(this).on('shown.bs.collapse', function (e) {
-    console.log(e.target.children[0].id);
-    const targetChart = e.target.children[0].id;
+    const targetChart = $(e.target).find('.chart')[0].id;
 
     // if the chart doesn't exist, draw it!
     if ($('#' + targetChart).children().length === 0) {
