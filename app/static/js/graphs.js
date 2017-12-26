@@ -22,7 +22,7 @@ var plotSentimentChart = function(sentimentData){
 
   // Axis formatting.
   x.timePeriod = d3.time.months;
-  x.timeInterval = 1;
+  x.timeInterval = 3;
   x.fontSize = 14;
   y.fontSize = 14;
   y.title = "Sentiment Polarity";
@@ -60,7 +60,7 @@ var plotTimeLangChart = function(timeLangData){
 
   // Axis formatting.
   x.timePeriod = d3.time.months;
-  x.timeInterval = 1;
+  x.timeInterval = 3;
   x.fontSize = 14;
   y.fontSize = 14;
   y.title = "Percentage of tweets";
@@ -193,7 +193,7 @@ var plotStringMatchChart =  function(stringMatchData){
 
   // Axis formatting.
   x.timePeriod = d3.time.months;
-  x.timeInterval = 1;
+  x.timeInterval = 3;
   x.fontSize = 14;
   y.fontSize = 14;
   y.title = "Percentage of tweets";
