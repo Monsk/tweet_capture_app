@@ -10,13 +10,14 @@ with open('app/euro_languages.json') as data_file:
     euro_languages = json.load(data_file)
 
 
-def returnTopSources(db, count):
+def returnTopSources(db, count = None):
     """
     Returns the top Brexit tweeters, where count is the number to return
     """
     sources = pd.read_sql_query("SELECT source_user_screen_name from Tweet", db.engine).iloc[:,0].dropna()
     sourceCounter = pd.DataFrame(sources.value_counts())
-    sourceCounter = sourceCounter.head(count)
+    if count is not None:
+        sourceCounter = sourceCounter.head(count)
     return sourceCounter
 
 def getCommonSources(db):
@@ -25,13 +26,13 @@ def getCommonSources(db):
     """
 
     print('calculating sourceFraction')
-    sourceCounter = returnTopSources(db, 10)
+    sourceCounter = returnTopSources(db)
     sourceFraction = 100 * sourceCounter / sourceCounter.sum()
     sourceFraction = sourceFraction.round(3)
     sourceFraction = sourceFraction.reset_index()
     sourceFraction = sourceFraction.rename(columns={'source_user_screen_name': 'percentage', 'index': 'source'})
 
-    sourceFraction = sourceFraction.to_json(orient='records')
+    sourceFraction = sourceFraction.head(10).to_json(orient='records')
 
     return sourceFraction
 

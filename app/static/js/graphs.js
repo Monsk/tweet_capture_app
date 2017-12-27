@@ -47,7 +47,8 @@ var plotTimeLangChart = function(timeLangData){
   var y = timeLangChart.addMeasureAxis("y", "percentage");
 
   var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
-
+  var legend = timeLangChart.addLegend(60, 10, 500, 20, "right");
+  legend.fontSize = 12;
 
   // Toggle data points here
   mySeries.lineMarkers = false;
@@ -69,17 +70,16 @@ var plotTimeLangChart = function(timeLangData){
   y.fontSize = 14;
   y.title = "Percentage of tweets";
 
-
-  timeLangChart.defaultColors = [
-    new dimple.color("#3498db", "#3498db", 1), // blue
-    new dimple.color("#e74c3c", "#c0392b", 1), // red
-    new dimple.color("#2ecc71", "#2ecc71", 1), // green
-    new dimple.color("#9b59b6", "#9b59b6", 1), // purple
-    new dimple.color("#e67e22", "#e67e22", 1), // orange
-    new dimple.color("#f1c40f", "#f1c40f", 1), // yellow
-    new dimple.color("#1abc9c", "#1abc9c", 1), // turquoise
-    new dimple.color("#95a5a6", "#95a5a6", 1)  // gray
-  ];
+  // timeLangChart.defaultColors = [
+  //   new dimple.color("#3498db", "#3498db", 1), // blue
+  //   new dimple.color("#e74c3c", "#c0392b", 1), // red
+  //   new dimple.color("#2ecc71", "#2ecc71", 1), // green
+  //   new dimple.color("#9b59b6", "#9b59b6", 1), // purple
+  //   new dimple.color("#e67e22", "#e67e22", 1), // orange
+  //   new dimple.color("#f1c40f", "#f1c40f", 1), // yellow
+  //   new dimple.color("#1abc9c", "#1abc9c", 1), // turquoise
+  //   new dimple.color("#95a5a6", "#95a5a6", 1)  // gray
+  // ];
 
   onViewport("#timeLangChart", "active", 600, function(el) {
     timeLangChart.draw(1000);
@@ -115,16 +115,16 @@ var plotSourceChart =  function(sourceData){
 
   // Define a custom color palette.  These colours are based on the excellent
   // set at http://flatuicolors.com/
-  sourceChart.defaultColors = [
-    new dimple.color("#3498db", "#2980b9", 1), // blue
-    new dimple.color("#e74c3c", "#c0392b", 1), // red
-    new dimple.color("#2ecc71", "#27ae60", 1), // green
-    new dimple.color("#9b59b6", "#8e44ad", 1), // purple
-    new dimple.color("#e67e22", "#d35400", 1), // orange
-    new dimple.color("#f1c40f", "#f39c12", 1), // yellow
-    new dimple.color("#1abc9c", "#16a085", 1), // turquoise
-    new dimple.color("#95a5a6", "#7f8c8d", 1)  // gray
-  ];
+  // sourceChart.defaultColors = [
+  //   new dimple.color("#3498db", "#2980b9", 1), // blue
+  //   new dimple.color("#e74c3c", "#c0392b", 1), // red
+  //   new dimple.color("#2ecc71", "#27ae60", 1), // green
+  //   new dimple.color("#9b59b6", "#8e44ad", 1), // purple
+  //   new dimple.color("#e67e22", "#d35400", 1), // orange
+  //   new dimple.color("#f1c40f", "#f39c12", 1), // yellow
+  //   new dimple.color("#1abc9c", "#16a085", 1), // turquoise
+  //   new dimple.color("#95a5a6", "#7f8c8d", 1)  // gray
+  // ];
 
   // Set some custom display elements for each series shape
   mySeries.afterDraw = function (s, d) {
@@ -137,17 +137,17 @@ var plotSourceChart =  function(sourceData){
     // Add a rectangle to the bar giving a nice style.  The idea was borrowed
     // from sirocco's question here:
     // http://stackoverflow.com/questions/25044608/dimplejs-barchart-styling-columns
-    svg.append("rect")
-    .attr("x", shape.attr("x"))
-    .attr("y", shape.attr("y"))
-    .attr("height", (0.5 * shape.attr("height")) / goldenRatio)
-    .attr("width", shape.attr("width"))
-    .style("fill", shape.style("stroke"))
-    .style("opacity", 1)
-    .style("pointer-events", "none");
+    // svg.append("rect")
+    // .attr("x", shape.attr("x"))
+    // .attr("y", shape.attr("y"))
+    // .attr("height", (0.5 * shape.attr("height")) / goldenRatio)
+    // .attr("width", shape.attr("width"))
+    // .style("fill", shape.style("stroke"))
+    // .style("opacity", 1)
+    // .style("pointer-events", "none");
 
     // Draw without a border
-    shape.attr("stroke", shape.attr("fill"));
+    // shape.attr("stroke", shape.attr("fill"));
 
     d3.selectAll("text")
     .filter(function(d){return typeof(d) == "string";})
@@ -221,16 +221,19 @@ var plotStringMatchChart =  function(stringMatchData){
 
 };
 
-
+// ----------------------------------------------------------------------
+// PROMINENCE OF PROLIFIC TWEETERS OVER TIME STACKED AREA CHART
+// ----------------------------------------------------------------------
 var plotPopularTweeterChart = function(popularTweeterData){
   var svg = dimple.newSvg("#popularTweeterChart", "100%", 500);
   var popularTweeterChart = new dimple.chart(svg, popularTweeterData);
-  var x = popularTweeterChart.addTimeAxis("x", "occurred_at_month", "%b %Y", "%b %y");
+  var x = popularTweeterChart.addTimeAxis("x", "occurred_at_month", "%b %Y", "%b '%y");
   var y = popularTweeterChart.addMeasureAxis("y", "count");
   var s = popularTweeterChart.addSeries("source_user_screen_name", dimple.plot.area);
   // s.interpolation = "cardinal";
 
-  popularTweeterChart.addLegend(60, 10, 500, 20, "right");
+  var legend = popularTweeterChart.addLegend(60, 10, 500, 20, "right");
+  legend.fontSize = 12;
 
   // Chart margins (l, t, r, b)
   popularTweeterChart.setMargins(60, 60, 30, 30);
