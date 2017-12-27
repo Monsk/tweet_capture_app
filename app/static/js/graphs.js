@@ -238,6 +238,16 @@ var plotPopularTweeterChart = function(popularTweeterData){
   // Chart margins (l, t, r, b)
   popularTweeterChart.setMargins(60, 60, 30, 30);
 
+  // custom tooltips
+  s.getTooltipText = function (e) {
+    console.log(e)
+    return [
+      'Source: ' + e.aggField,
+      'Share count: ' + (e.yValue),
+      'Month: ' + d3.time.format("%B '%y")(e.x)
+    ];
+  };
+
   // Axis formatting.
   x.timePeriod = d3.time.months;
   x.timeInterval = 3;
