@@ -102,11 +102,14 @@ body header{
   padding-bottom:5px
 }
 body section{
-  border-top:4px solid #333;
+  border-bottom:4px solid #333;
   position:relative;
   margin-top:40px;
   padding:50px 0 65px;
   font-size:16px;
+}
+body section.first{
+  margin-top: 10px;
 }
 body section.about{
   border-top:none;
@@ -165,7 +168,7 @@ body section hgroup{
 body section hgroup h2.c1{color:#2bb7ca}body section hgroup h2.c2{color:#f05d5e}body section hgroup h2.c3{color:#fed765}body section hgroup h2.c4{color:#966b9d}body section hgroup h2.c5{color:#60ad56}body section hgroup h2.c6{color:#e28411}body section hgroup h2.c7{color:#e76b74}body section hgroup h2.c8{color:#83b692}body table{width:90%;margin:40px auto;}body table td{text-align:center;}body table td a.icon{font-size:40px;padding:0 8px;position:relative;padding:5px 5px 6px 6px;border-radius:4px;-webkit-transition:0.3s ease-out;-moz-transition:0.3s ease-out;-o-transition:0.3s ease-out;-ms-transition:0.3s ease-out;transition:0.3s ease-out;}@media (max-width:400px){body table td a.icon{font-size:30px}}body table td a.icon.c1{color:#2bb7ca;}body table td a.icon.c1:hover{color:#1a6e79}body table td a.icon.c2{color:#f05d5e;}body table td a.icon.c2:hover{color:#b71112}body table td a.icon.c3{color:#fed765;}body table td a.icon.c3:hover{color:#d49e01}body table td a.icon.c4{color:#966b9d;}body table td a.icon.c4:hover{color:#5b3f5f}body table td a.icon.c5{color:#60ad56;}body table td a.icon.c5:hover{color:#396933}body table td a.icon.c6{color:#e28411;}body table td a.icon.c6:hover{color:#884f0a}body table td a.icon.c7{color:#e76b74;}body table td a.icon.c7:hover{color:#af1c27}body table td a.icon.c8{color:#83b692;}body table td a.icon.c8:hover{color:#467654}body table td a.icon:hover{text-decoration:none}
 .item{
   /*font-size:16px;*/
-  cursor:pointer;
+  /*cursor:pointer;*/
   position:relative;
   padding-top:30px;
   padding-bottom:30px;
@@ -198,9 +201,9 @@ body section hgroup h2.c1{color:#2bb7ca}body section hgroup h2.c2{color:#f05d5e}
 .item.maybe:before{
   background:#e8bf11
 }
-.item.list:hover{
+/*.item.list:hover{
   background:#fffbdc
-}
+}*/
 .t-overlay{top:0;left:0;right:0;bottom:0;background:rgba(51,51,51,0.3);position:fixed;display:none}
 .t-modal{position:absolute;background:#fff;border:1px solid #aaa;-webkit-box-shadow:0 0 7px rgba(0,0,0,0.2);box-shadow:0 0 7px rgba(0,0,0,0.2);border-radius:7px;}
 .t-modal .item{border-top:0 none}

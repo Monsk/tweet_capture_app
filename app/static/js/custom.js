@@ -6,34 +6,34 @@
 // Chart plotting and showing
 // -----------------------
 
-$('.card').each(function(i, obj){
-  // Add a listener to a chart area being shown
-  $(this).on('shown.bs.collapse', function (e) {
-    const targetChart = $(e.target).find('.chart')[0].id;
-
-    // if the chart doesn't exist, draw it!
-    if ($('#' + targetChart).children().length === 0) {
-      switch(targetChart){
-        case 'sourceBarChart':
-        plotSourceChart(sourceData);
-        break;
-        case 'timeLangChart':
-        plotTimeLangChart(timeLangData);
-        break;
-        case 'sentimentChart':
-        plotSentimentChart(sentimentData);
-        break;
-        default:
-        break;
-      };
-    };
-
-    // scroll to the top of the chart
-    $('html, body').animate({
-      scrollTop: $('#' + targetChart).parent().parent().offset().top - 50
-    }, 500);
-  })
-})
+// $('.card').each(function(i, obj){
+//   // Add a listener to a chart area being shown
+//   $(this).on('shown.bs.collapse', function (e) {
+//     const targetChart = $(e.target).find('.chart')[0].id;
+//
+//     // if the chart doesn't exist, draw it!
+//     if ($('#' + targetChart).children().length === 0) {
+//       switch(targetChart){
+//         case 'sourceBarChart':
+//         plotSourceChart(sourceData);
+//         break;
+//         case 'timeLangChart':
+//         plotTimeLangChart(timeLangData);
+//         break;
+//         case 'sentimentChart':
+//         plotSentimentChart(sentimentData);
+//         break;
+//         default:
+//         break;
+//       };
+//     };
+//
+//     // scroll to the top of the chart
+//     $('html, body').animate({
+//       scrollTop: $('#' + targetChart).parent().parent().offset().top - 50
+//     }, 500);
+//   })
+// })
 
 // -----------------------
 // String input field behaviour
@@ -206,8 +206,9 @@ $(function() {
   })
 })
 
-
-/// General functions ///
+// ---------------------
+// General functions
+// ---------------------
 
 // Number counter
 $(document)
@@ -222,3 +223,37 @@ $('.count').each(function () {
     }
   });
 });
+
+// Adds a class when target is in view
+function onViewport(el, elClass, offset, callback) {
+  /*** Based on http://ejohn.org/blog/learning-from-twitter/ ***/
+  var didScroll = false;
+  var this_top;
+  var height;
+  var top;
+
+  if (!offset) { var offset = 600 };
+
+  $(window).scroll(function() {
+      didScroll = true;
+  });
+
+  setInterval(function() {
+    if (didScroll) {
+      didScroll = false;
+      dist_from_top = $(this).scrollTop();
+
+      $(el).each(function(i){
+        this_top = $(this).offset().top - offset;
+        height   = $(this).height();
+
+        // Scrolled within current section
+        if (dist_from_top >= this_top && !$(this).hasClass(elClass)) {
+          $(this).addClass(elClass);
+
+          if (typeof callback == "function") callback($(this));
+        }
+      });
+    }
+  }, 100);
+}

@@ -27,8 +27,10 @@ var plotSentimentChart = function(sentimentData){
   y.fontSize = 14;
   y.title = "Sentiment Polarity";
 
-  sentimentChart.draw(1000);
-  x.titleShape.remove();
+  onViewport("#sentimentChart", "active", 600, function(el) {
+    sentimentChart.draw(1000);
+    x.titleShape.remove();
+  });
 
 }
 
@@ -77,8 +79,10 @@ var plotTimeLangChart = function(timeLangData){
     new dimple.color("#95a5a6", "#95a5a6", 1)  // gray
   ];
 
-  timeLangChart.draw(1000);
-  x.titleShape.remove();
+  onViewport("#timeLangChart", "active", 600, function(el) {
+    timeLangChart.draw(1000);
+    x.titleShape.remove();
+  });
 };
 
 // ----------------------------------------------------------------------
@@ -163,7 +167,9 @@ var plotSourceChart =  function(sourceData){
     ];
   };
 
-  sourceChart.draw(1000);
+  onViewport("#sourceBarChart", "active", 600, function(el) {
+    sourceChart.draw(1000);
+  });
 };
 
 
@@ -320,3 +326,8 @@ var plotStringMatchChart =  function(stringMatchData){
 //     // when you know the data won't have changed.
 //     chart.draw(0, true);
 // };
+
+
+var sourceChart = plotSourceChart(sourceData);
+var timeLangChart = plotTimeLangChart(timeLangData);
+var sentimentChart = plotSentimentChart(sentimentData);
