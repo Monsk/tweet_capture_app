@@ -15,8 +15,10 @@ var plotSentimentChart = function(sentimentData){
 
   // custom tooltips
   scoreSeries.getTooltipText = function (e) {
+    console.log(e);
     return [
-      'Polarity: ' + d3.format(",.3f")(e.yValue)
+      'Sentiment score: ' + d3.format(",.3f")(e.yValue),
+      'Date: ' + d3.time.format("%d %B '%y")(e.x)
     ];
   };
 
@@ -220,6 +222,35 @@ var plotStringMatchChart =  function(stringMatchData){
 };
 
 
+var plotPopularTweeterChart = function(popularTweeterData){
+  var svg = dimple.newSvg("#popularTweeterChart", "100%", 500);
+  var popularTweeterChart = new dimple.chart(svg, popularTweeterData);
+  var x = popularTweeterChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b %y");
+  var y = popularTweeterChart.addMeasureAxis("y", "count");
+  var s = popularTweeterChart.addSeries("source_user_screen_name", dimple.plot.area);
+  // s.interpolation = "cardinal";
+
+  popularTweeterChart.addLegend(60, 10, 500, 20, "right");
+
+  // Chart margins (l, t, r, b)
+  popularTweeterChart.setMargins(60, 60, 30, 30);
+
+  // Axis formatting.
+  x.timePeriod = d3.time.months;
+  x.timeInterval = 3;
+  x.fontSize = 14;
+  y.fontSize = 14;
+  y.title = "Number of tweets & retweets";
+
+  onViewport("#popularTweeterChart", "active", 600, function(el) {
+    popularTweeterChart.draw(1000);
+    x.titleShape.remove();
+  });
+
+}
+
+
+
 // ----------------------------------------------------------------------
 // LANGUAGE BAR CHART
 // ----------------------------------------------------------------------
@@ -331,3 +362,4 @@ var plotStringMatchChart =  function(stringMatchData){
 var sourceChart = plotSourceChart(sourceData);
 var timeLangChart = plotTimeLangChart(timeLangData);
 var sentimentChart = plotSentimentChart(sentimentData);
+plotPopularTweeterChart(popularTweeterData);

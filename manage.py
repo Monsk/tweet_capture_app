@@ -8,7 +8,7 @@ from flask.ext.migrate import Migrate, MigrateCommand
 from app import app, db
 from app.models import ComputedData, Tweet, WordCounts
 from twitter_stream import twitter_listener
-from analysis_functions import getCommonSources, getTimeLangFraction, getSentimentScores
+from analysis_functions import getCommonSources, getTimeLangFraction, getSentimentScores, getTweetCountByCommonSources
 from textblob import TextBlob
 
 from collections import Counter
@@ -55,6 +55,7 @@ def compute_plot_data():
     saveComputedData('sourceFraction', getCommonSources(db))
     saveComputedData('timeLangFraction', getTimeLangFraction(db))
     saveComputedData('sentimentScore', getSentimentScores(db))
+    saveComputedData('tweetCountByCommonSources', getTweetCountByCommonSources(db))
 
 @manager.command
 def compute_sentiment_scores():
@@ -111,7 +112,9 @@ def count_tweet_words():
 
     # iterate through the dict items, find the word in the table and add today's data to the json, or create a new entry
 
-
+@manager.command
+def topSources():
+    print(getTweetCountByCommonSources(db))
 
 if __name__ == "__main__":
     manager.run()

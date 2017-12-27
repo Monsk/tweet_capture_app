@@ -85,6 +85,20 @@
 
     <section>
       <div class="card">
+      <div class="item list off" id="sourceProminence" data-toggle="" data-parent="#accordion" href="#popularTweeterChartStage" aria-expanded="false" aria-controls="popularTweeterChartStage">
+        <hgroup><h2 class="c1">
+            Commentator prominence over time
+        </h2></hgroup>
+      </div>
+      <div id="popularTweeterChartStage" class="chart-stage ">
+        <div class="chart"  id="popularTweeterChart">
+        </div>
+      </div>
+    </div>
+    </section>
+
+    <section>
+      <div class="card">
       <div class="item list off" id="stringMatch"  data-toggle="" data-parent="#accordion" href="#stringMatchStage" aria-expanded="false" aria-controls="stringMatchStage">
         <hgroup><h2 class="c3">
           The evolving focus
@@ -164,6 +178,7 @@
 var timeLangData = {{ timeLangData | safe }}
 var sourceData = {{ sourceData | safe }}
 var sentimentData = {{ sentimentData | safe }}
+var popularTweeterData = {{ popularTweeterData | safe }}
 </script>
 
 <script src="./static/js/custom.js"></script>

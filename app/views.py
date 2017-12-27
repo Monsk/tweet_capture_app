@@ -59,11 +59,13 @@ def main():
     timeLangFraction = ComputedData.query.filter_by(dataTitle='timeLangFraction').first().jsonData
     sourceFraction = ComputedData.query.filter_by(dataTitle='sourceFraction').first().jsonData
     sentimentData = ComputedData.query.filter_by(dataTitle='sentimentScore').first().jsonData
+    popularTweeterData = ComputedData.query.filter_by(dataTitle='tweetCountByCommonSources').first().jsonData
 
     return render_template("index.html",
     timeLangData = timeLangFraction,
     sourceData = sourceFraction,
-    sentimentData = sentimentData
+    sentimentData = sentimentData,
+    popularTweeterData = popularTweeterData
     )
 
 @app.route("/about")

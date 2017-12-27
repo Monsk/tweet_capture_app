@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 from datetime import timedelta
+from app.models import Tweet
 
 with open('app/languages.json') as data_file:
     languages = json.load(data_file)
@@ -8,23 +9,61 @@ with open('app/languages.json') as data_file:
 with open('app/euro_languages.json') as data_file:
     euro_languages = json.load(data_file)
 
+kw = lambda x: timedelta(days=x.weekday())
+
+def returnTopSources(db, count):
+    """
+    Returns the top Brexit tweeters, where count is the number to return
+    """
+    sources = pd.read_sql_query("SELECT source_user_screen_name from Tweet", db.engine).iloc[:,0].dropna()
+    sourceCounter = pd.DataFrame(sources.value_counts())
+    sourceCounter = sourceCounter.head(count)
+    return sourceCounter
+
 def getCommonSources(db):
     """
     Extract the tweet sources, count them, and then turn the counter dict into a list of tuples
     """
 
     print('calculating sourceFraction')
-    sources = pd.read_sql_query("SELECT source_user_screen_name from Tweet", db.engine).iloc[:,0].dropna()
-    sourceCounter = pd.DataFrame(sources.value_counts())
+    sourceCounter = returnTopSources(db, 10)
     sourceFraction = 100 * sourceCounter / sourceCounter.sum()
     sourceFraction = sourceFraction.round(3)
     sourceFraction = sourceFraction.reset_index()
     sourceFraction = sourceFraction.rename(columns={'source_user_screen_name': 'percentage', 'index': 'source'})
-    sourceFraction = sourceFraction.head(10)
 
     sourceFraction = sourceFraction.to_json(orient='records')
 
     return sourceFraction
+
+def getTweetCountByCommonSources(db):
+    """
+    Filter all tweets by authors identified by getCommonSources, count by months
+    Returns a json object with each node of the format {author: xx, month: xx, tweet_count: xx}
+    """
+
+    print('calculating TweetCountByCommonSources')
+
+    # Load tweets from database
+    topSources = returnTopSources(db, 10).reset_index()['index'].values
+    query_obj = db.session.query(Tweet). \
+        filter(Tweet.source_user_screen_name.in_((topSources))). \
+        with_entities(Tweet.source_user_screen_name, Tweet.text, Tweet.occurred_at)
+    tweets = pd.read_sql(query_obj.statement, query_obj.session.bind)
+
+    # Tidy up the timestamp and group by week
+    tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
+    tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
+    groupTweets = tweets.groupby([tweets['occurred_at_week'], 'source_user_screen_name']).source_user_screen_name.count()
+    groupTweets.rename('count', inplace=True)
+    groupTweets = groupTweets.reset_index()
+    groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
+
+    groupTweets = groupTweets.to_json(orient="records")
+
+    return groupTweets
+
+
 
 def getLangFraction(db):
     """
@@ -51,7 +90,6 @@ def getTimeLangFraction(db):
     Returns on the most common languages as defined in getLangFraction
     """
 
-    kw = lambda x: timedelta(days=x.weekday())
     def percentage(x):
         percentage = 100 * float(x['count']) / float(ggTweets[ggTweets.index == x["occurred_at_week"]][0])
         return round(percentage, 3)
