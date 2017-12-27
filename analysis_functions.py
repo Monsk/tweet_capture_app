@@ -9,7 +9,6 @@ with open('app/languages.json') as data_file:
 with open('app/euro_languages.json') as data_file:
     euro_languages = json.load(data_file)
 
-kw = lambda x: timedelta(days=x.weekday())
 
 def returnTopSources(db, count):
     """
@@ -51,13 +50,12 @@ def getTweetCountByCommonSources(db):
         with_entities(Tweet.source_user_screen_name, Tweet.text, Tweet.occurred_at)
     tweets = pd.read_sql(query_obj.statement, query_obj.session.bind)
 
-    # Tidy up the timestamp and group by week
+    # Tidy up the timestamp and group by month
     tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
-    tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
-    groupTweets = tweets.groupby([tweets['occurred_at_week'], 'source_user_screen_name']).source_user_screen_name.count()
+    tweets['occurred_at_month'] = tweets.occurred_at.dt.strftime('%b %Y')
+    groupTweets = tweets.groupby([tweets['occurred_at_month'], 'source_user_screen_name']).source_user_screen_name.count()
     groupTweets.rename('count', inplace=True)
     groupTweets = groupTweets.reset_index()
-    groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
 
     groupTweets = groupTweets.to_json(orient="records")
 
@@ -91,7 +89,7 @@ def getTimeLangFraction(db):
     """
 
     def percentage(x):
-        percentage = 100 * float(x['count']) / float(ggTweets[ggTweets.index == x["occurred_at_week"]][0])
+        percentage = 100 * float(x['count']) / float(ggTweets[ggTweets.index == x["occurred_at_month"]][0])
         return round(percentage, 3)
 
     langFraction = getLangFraction(db)
@@ -100,38 +98,36 @@ def getTimeLangFraction(db):
     tweets = pd.read_sql_query("SELECT lang, occurred_at from Tweet", db.engine)
     tweets = tweets[tweets['lang'].isin(euro_languages.keys())]
     tweets.occurred_at = pd.DatetimeIndex(tweets.occurred_at).normalize()
-    tweets['occurred_at_week'] = tweets.occurred_at - tweets.occurred_at.map(kw)
-    groupTweets = tweets.groupby([tweets['occurred_at_week'], 'lang']).lang.count()
+    tweets['occurred_at_month'] = tweets.occurred_at.dt.strftime('%b %Y')
+    groupTweets = tweets.groupby([tweets['occurred_at_month'], 'lang']).lang.count()
     groupTweets.rename('count', inplace=True)
     groupTweets = groupTweets.reset_index()
     groupTweets['language'] = [languages[x] for x in groupTweets.lang]
 
-    ggTweets = groupTweets.groupby('occurred_at_week')['count'].sum()
+    ggTweets = groupTweets.groupby('occurred_at_month')['count'].sum()
 
     groupTweets['percentage'] = groupTweets.apply(percentage, axis=1)
-    groupTweets.occurred_at_week = groupTweets.occurred_at_week.dt.strftime('%d %b %Y')
+    # groupTweets.occurred_at_month = groupTweets.occurred_at_month.dt.strftime('%d %b %Y')
     timeLangFraction = groupTweets[groupTweets.lang.isin(commonLanguages)]
 
     timeLangFraction = timeLangFraction.to_json(orient='records')
     return timeLangFraction
 
 def getSentimentScores(db):
-    kw = lambda x: timedelta(days=x.weekday())
 
     print('calculating sentimentScores')
     sentiment_scores = pd.read_sql_query("SELECT sentiment_score, occurred_at from Tweet", db.engine)
     sentiment_scores.occurred_at = pd.DatetimeIndex(sentiment_scores.occurred_at).normalize()
-    sentiment_scores['occurred_at_week'] = sentiment_scores.occurred_at - sentiment_scores.occurred_at.map(kw)
-    sentiment_scores.occurred_at_week = sentiment_scores.occurred_at_week.dt.strftime('%d %b %Y')
-    sentiment_scores.rename(index=str, columns={"sentiment_score": "Score", "occurred_at_week": "Date"}, inplace=True)
+    sentiment_scores['occurred_at_month'] = sentiment_scores.occurred_at.dt.strftime('%b %Y')
+    sentiment_scores.rename(index=str, columns={"sentiment_score": "Score", "occurred_at_month": "Date"}, inplace=True)
 
-    weekScores = sentiment_scores.groupby('Date')['Score'].mean()
-    weekScores = weekScores.reset_index()
+    monthScores = sentiment_scores.groupby('Date')['Score'].mean()
+    monthScores = monthScores.reset_index()
 
     # Convert to json
-    weekScores = weekScores.to_json(orient='records')
+    monthScores = monthScores.to_json(orient='records')
     # individualScores = sentiment_scores.to_json(orient='records')
 
-    # sentiment_scores = str([{"weekScores": weekScores, "individualScores": individualScores}])
+    # sentiment_scores = str([{"monthScores": monthScores, "individualScores": individualScores}])
 
-    return weekScores
+    return monthScores

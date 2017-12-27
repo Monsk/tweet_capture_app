@@ -6,7 +6,7 @@ var plotSentimentChart = function(sentimentData){
 
   var svg = dimple.newSvg("#sentimentChart", "100%", 500);
   var sentimentChart = new dimple.chart(svg);
-  var x = sentimentChart.addTimeAxis("x", "Date", "%d %b %Y", "%b  '%y");
+  var x = sentimentChart.addTimeAxis("x", "Date", "%b %Y", "%b '%y");
   var y = sentimentChart.addMeasureAxis("y", "Score");
   y.tickFormat = ",.2f";
 
@@ -43,7 +43,7 @@ var plotSentimentChart = function(sentimentData){
 var plotTimeLangChart = function(timeLangData){
   var svg = dimple.newSvg("#timeLangChart", "100%", 500);
   var timeLangChart = new dimple.chart(svg, timeLangData);
-  var x = timeLangChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b  '%y");
+  var x = timeLangChart.addTimeAxis("x", "occurred_at_month", "%b %Y", "%b  '%y");
   var y = timeLangChart.addMeasureAxis("y", "percentage");
 
   var mySeries = timeLangChart.addSeries("language", dimple.plot.line);
@@ -182,7 +182,7 @@ var plotStringMatchChart =  function(stringMatchData){
 
   var svg = dimple.newSvg("#timeStringMatchChart", "100%", 500);
   var timeStringMatchChart = new dimple.chart(svg, stringMatchData);
-  var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b %y");
+  var x = timeStringMatchChart.addTimeAxis("x", "occurred_at_month", "%b %Y", "%b %y");
   var y = timeStringMatchChart.addMeasureAxis("y", "percentage");
   var mySeries = timeStringMatchChart.addSeries("string", dimple.plot.line);
 
@@ -225,7 +225,7 @@ var plotStringMatchChart =  function(stringMatchData){
 var plotPopularTweeterChart = function(popularTweeterData){
   var svg = dimple.newSvg("#popularTweeterChart", "100%", 500);
   var popularTweeterChart = new dimple.chart(svg, popularTweeterData);
-  var x = popularTweeterChart.addTimeAxis("x", "occurred_at_week", "%d %b %Y", "%b %y");
+  var x = popularTweeterChart.addTimeAxis("x", "occurred_at_month", "%b %Y", "%b %y");
   var y = popularTweeterChart.addMeasureAxis("y", "count");
   var s = popularTweeterChart.addSeries("source_user_screen_name", dimple.plot.area);
   // s.interpolation = "cardinal";
