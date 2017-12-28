@@ -45,7 +45,7 @@ def getTweetCountByCommonSources(db):
     print('calculating TweetCountByCommonSources')
 
     # Load tweets from database
-    topSources = returnTopSources(db, 10).reset_index()['index'].values
+    topSources = returnTopSources(db, 6).reset_index()['index'].values
     query_obj = db.session.query(Tweet). \
         filter(Tweet.source_user_screen_name.in_((topSources))). \
         with_entities(Tweet.source_user_screen_name, Tweet.text, Tweet.occurred_at)

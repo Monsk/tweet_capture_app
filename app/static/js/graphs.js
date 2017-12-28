@@ -240,7 +240,6 @@ var plotPopularTweeterChart = function(popularTweeterData){
 
   // custom tooltips
   s.getTooltipText = function (e) {
-    console.log(e)
     return [
       'Source: ' + e.aggField,
       'Share count: ' + (e.yValue),
@@ -325,35 +324,35 @@ var plotPopularTweeterChart = function(popularTweeterData){
 //
 //   };
 //
-//   // Override the standard tooltip behaviour
-//     mySeries.addEventHandler("mouseover", function (e){
+// // Override the standard tooltip behaviour
+//   mySeries.addEventHandler("mouseover", function (e){
 //
-//       // Draw the text information in the top left corner
-//       svg.selectAll(".dimple-hover-text")
-//         .data([e.xValue, String(d3.format(",.f")(e.yValue)) + "%"])
-//           .enter()
-//           .append("text")
-//           .attr("class", "dimple-hover-text")
-//           .attr("x", chart._xPixels()  + chart._widthPixels() - 25)
-//           .attr("y", function (d, i) { return chart._yPixels() + 20 + i * 25; })
-//           .style("text-anchor", "end")
-//           .style("font-size", "20px")
-//           .style("fill", chart.getColor(e.xValue).fill)
-//           .style("pointer-events", "none")
-//           .text(function (d) { return d ; } );
-//
-//       // Put a coloured bar next to the text for no good reason
-//       svg.append("rect")
+//     // Draw the text information in the top left corner
+//     svg.selectAll(".dimple-hover-text")
+//       .data([e.xValue, String(d3.format(",.f")(e.yValue)) + "%"])
+//         .enter()
+//         .append("text")
 //         .attr("class", "dimple-hover-text")
-//         .attr("x", chart._xPixels() + chart._widthPixels() - 15)
-//         .attr("y", chart._yPixels())
-//         .attr("height", 60)
-//         .attr("width", 10)
+//         .attr("x", chart._xPixels()  + chart._widthPixels() - 25)
+//         .attr("y", function (d, i) { return chart._yPixels() + 20 + i * 25; })
+//         .style("text-anchor", "end")
+//         .style("font-size", "20px")
 //         .style("fill", chart.getColor(e.xValue).fill)
-//         .style("opacity", 1)
-//         .style("pointer-events", "none");
+//         .style("pointer-events", "none")
+//         .text(function (d) { return d ; } );
 //
-//     });
+//     // Put a coloured bar next to the text for no good reason
+//     svg.append("rect")
+//       .attr("class", "dimple-hover-text")
+//       .attr("x", chart._xPixels() + chart._widthPixels() - 15)
+//       .attr("y", chart._yPixels())
+//       .attr("height", 60)
+//       .attr("width", 10)
+//       .style("fill", chart.getColor(e.xValue).fill)
+//       .style("opacity", 1)
+//       .style("pointer-events", "none");
+//
+//   });
 //
 //     // Clear the text on exit
 //     mySeries.addEventHandler("mouseleave", function (e) {
