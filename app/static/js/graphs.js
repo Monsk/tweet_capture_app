@@ -12,6 +12,7 @@ var plotSentimentChart = function(sentimentData){
 
   var scoreSeries = sentimentChart.addSeries(null, dimple.plot.line);
   scoreSeries.data = sentimentData;
+  scoreSeries.lineWeight = 4;
 
   // custom tooltips
   scoreSeries.getTooltipText = function (e) {
@@ -52,6 +53,7 @@ var plotTimeLangChart = function(timeLangData){
 
   // Toggle data points here
   mySeries.lineMarkers = false;
+  mySeries.lineWeight = 4;
 
   // Chart margins (l, t, r, b)
   timeLangChart.setMargins(60, 30, 30, 30);
@@ -229,8 +231,7 @@ var plotPopularTweeterChart = function(popularTweeterData){
   var popularTweeterChart = new dimple.chart(svg, popularTweeterData);
   var x = popularTweeterChart.addTimeAxis("x", "occurred_at_month", "%b %Y", "%b '%y");
   var y = popularTweeterChart.addMeasureAxis("y", "count");
-  var s = popularTweeterChart.addSeries("source_user_screen_name", dimple.plot.area);
-  // s.interpolation = "cardinal";
+  var s = popularTweeterChart.addSeries("source_user_screen_name", dimple.plot.line);
 
   var legend = popularTweeterChart.addLegend(60, 10, 500, 20, "right");
   legend.fontSize = 12;
@@ -246,6 +247,8 @@ var plotPopularTweeterChart = function(popularTweeterData){
       'Month: ' + d3.time.format("%B '%y")(e.x)
     ];
   };
+  s.lineWeight = 4;
+  // s.interpolation = "cardinal";
 
   // Axis formatting.
   x.timePeriod = d3.time.months;
