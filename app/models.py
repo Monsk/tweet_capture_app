@@ -55,6 +55,13 @@ class Tweet(db.Model):
         '''
         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", self.text).split())
 
+    def remove_url(self, is_retweet):
+        '''
+        Utility function to clean tweet text of urls
+        '''
+        target_text = self.retweet_text if is_retweet else self.text
+        return re.sub('https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=\/]{2,256}', '', target_text)
+
     def get_tweet_sentiment(self):
         '''
         Utility function to classify sentiment of passed tweet

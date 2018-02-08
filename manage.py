@@ -72,45 +72,54 @@ def compute_sentiment_scores():
 
 
 @manager.command
-def count_tweet_words():
-    todays_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > datetime.datetime.now() - timedelta(days=1) )
+def count_tweet_words(start_date = None, end_date = None):
+    if start_date is not None and end_date is not None:
+        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > start_date and Tweet.recorded_at < end_date )
+    else:
+        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > datetime.datetime.now() - timedelta(days=1) )
 
     combined_string = ''
+    today = datetime.datetime.now().strftime("%Y-%m-%d")
 
-    for tweet in todays_tweets:
+    for tweet in scoped_tweets:
         # select retweet_text if the text is a retweet
         if tweet.retweet_text is None:
-            combined_string = combined_string + tweet.text
+            combined_string = combined_string + tweet.remove_url(is_retweet = False)
         else:
-            combined_string = combined_string + tweet.retweet_text
+            combined_string = combined_string + tweet.remove_url(is_retweet = True)
 
     # remove all punctuation and convert to lower case
     combined_string = re.sub('([^\s\w]|_)+', '', combined_string.lower())
     word_counts = sorted(Counter(combined_string.split()).items())
+    print(len(word_counts))
 
     existing_words = db.session.query(WordCounts.word)
     n=0
     for word_count in word_counts:
         word = word_count[0]
+
         # if the word does not exist in the table, add it
         if (db.session.query(WordCounts.word).filter_by(word=word).scalar() is None):
             new_word = WordCounts(
                 word = word,
-                frequencyData = json.dumps([{'date':datetime.datetime.now().strftime("%Y-%m-%d"), 'count':word_count[1]}])
+                frequencyData = json.dumps([{'date':today, 'count':word_count[1]}])
             )
-            # db.session.add(new_word)
-            # db.session.commit()
-            print( word + ' added to the database')
-            n=n+1
-            if n > 5:
-                return
+            db.session.add(new_word)
+            db.session.commit()
         else:
             wordCount = WordCounts.query.filter_by(word=word).first()
-            # frequencyData = json.loads(wordCount.frequencyData)
-            wordCount.frequencyData.update({'date':datetime.datetime.now().strftime("%Y-%m-%d"), 'count':word_count[1]})
 
+            if bool(re.search(today, wordCount.frequencyData)):
+            # Check for an entry from today already recorded
+                continue
+            else:
+            # If no record from today, add one
+                frequencyData = json.loads(wordCount.frequencyData)
+                frequencyData.append({'date':today, 'count':word_count[1]})
+                wordCount.frequencyData = json.dumps(frequencyData)
+    db.session.commit()
+    return
 
-    # iterate through the dict items, find the word in the table and add today's data to the json, or create a new entry
 
 @manager.command
 def topSources():
