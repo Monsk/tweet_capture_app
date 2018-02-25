@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import load_only
+from sqlalchemy import and_
 from flask_script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -79,7 +80,7 @@ def count_tweet_words(today = None, day_scope = None):
             today = datetime.datetime.now()
         scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > today - timedelta(days=1) )
     elif day_scope is not None and today is not None:
-        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > today - timedelta(days=day_scope) and Tweet.recorded_at < today)
+        scoped_tweets = db.session.query(Tweet).filter(and_(Tweet.recorded_at > today, Tweet.recorded_at < today + timedelta(days=day_scope)))
     else:
         print("Insufficient information to scope tweets")
         return
@@ -103,14 +104,15 @@ def count_tweet_words(today = None, day_scope = None):
     for word_count in word_counts:
         word = word_count[0]
 
-        # if the word does not exist in the table, add it
         try:
+            # if the word does not exist in the table, add it
             if (db.session.query(WordCounts.word).filter_by(word=word).scalar() is None):
                 new_word = WordCounts(
                     word = word,
                     frequencyData = json.dumps([{'date':today.strftime("%Y-%m-%d"), 'count':word_count[1]}])
                 )
                 db.session.add(new_word)
+            # else, update the entry with the new data
             else:
                 wordCount = WordCounts.query.filter_by(word=word).first()
 
@@ -130,7 +132,14 @@ def count_tweet_words(today = None, day_scope = None):
 @manager.command
 def batch_word_count():
     # Find earliest tweet
+    first_tweet = db.session.query(Tweet).order_by(Tweet.occurred_at.asc()).first()
+    first_tweet_time = first_tweet.occurred_at
     # For all time, in batches of 7 days, count_tweet_words
+    date = first_tweet_time
+    while date < datetime.datetime.now():
+        count_tweet_words(today = date, day_scope = 7)
+        print(date)
+        date = date + timedelta(days = 7)
     return
 
 @manager.command
