@@ -56,7 +56,7 @@ $.fn.ajaxStringRequest = function(){
   var result = null;
   var arr = [];
   $('input[name="string"]').each(function(i, obj){
-    arr.push($(this).val());
+    arr.push($(this).val().toLowerCase());
   });
   $.getJSON('/_string_filter', { str_arr: JSON.stringify(arr) })
   .done(function(data){

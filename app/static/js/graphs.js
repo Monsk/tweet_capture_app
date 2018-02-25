@@ -171,6 +171,7 @@ var plotStringMatchChart =  function(stringMatchData){
 
   // Toggle data points here
   mySeries.lineMarkers = false;
+  mySeries.lineWeight = 4;
 
   // Chart margins (l, t, r, b)
   timeStringMatchChart.setMargins(60, 30, 30, 30);
@@ -182,9 +183,17 @@ var plotStringMatchChart =  function(stringMatchData){
     ];
   };
 
+  timeStringMatchChart.defaultColors = [
+    new dimple.color("#3A5B8A", "#3A5B8A", 1), // Turquoise
+    new dimple.color("#779F90", "#779F90", 1), // Blue
+    new dimple.color("#BDDADA", "#BDDADA", 1), // Light blue
+    new dimple.color("#FDE972", "#FDE972", 1), // Yellow
+    new dimple.color("#B6B771", "#B6B771", 1) // Green
+  ];
+
   // Axis formatting.
-  // x.timePeriod = d3.time.months;
-  // x.timeInterval = 3;
+  x.timePeriod = d3.time.months;
+  x.timeInterval = 3;
   x.fontSize = 14;
   y.fontSize = 14;
   y.title = "Percentage of tweets";
