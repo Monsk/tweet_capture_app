@@ -72,14 +72,19 @@ def compute_sentiment_scores():
 
 
 @manager.command
-def count_tweet_words(start_date = None, end_date = None):
-    if start_date is not None and end_date is not None:
-        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > start_date and Tweet.recorded_at < end_date )
+def count_tweet_words(today = None, day_scope = None):
+
+    if day_scope is None:
+        if today is None:
+            today = datetime.datetime.now()
+        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > today - timedelta(days=1) )
+    elif day_scope is not None and today is not None:
+        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > today - timedelta(days=day_scope) and Tweet.recorded_at < today)
     else:
-        scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > datetime.datetime.now() - timedelta(days=1) )
+        print("Insufficient information to scope tweets")
+        return
 
     combined_string = ''
-    today = datetime.datetime.now().strftime("%Y-%m-%d")
 
     for tweet in scoped_tweets:
         # select retweet_text if the text is a retweet
@@ -99,27 +104,34 @@ def count_tweet_words(start_date = None, end_date = None):
         word = word_count[0]
 
         # if the word does not exist in the table, add it
-        if (db.session.query(WordCounts.word).filter_by(word=word).scalar() is None):
-            new_word = WordCounts(
-                word = word,
-                frequencyData = json.dumps([{'date':today, 'count':word_count[1]}])
-            )
-            db.session.add(new_word)
-            db.session.commit()
-        else:
-            wordCount = WordCounts.query.filter_by(word=word).first()
-
-            if bool(re.search(today, wordCount.frequencyData)):
-            # Check for an entry from today already recorded
-                continue
+        try:
+            if (db.session.query(WordCounts.word).filter_by(word=word).scalar() is None):
+                new_word = WordCounts(
+                    word = word,
+                    frequencyData = json.dumps([{'date':today.strftime("%Y-%m-%d"), 'count':word_count[1]}])
+                )
+                db.session.add(new_word)
             else:
-            # If no record from today, add one
-                frequencyData = json.loads(wordCount.frequencyData)
-                frequencyData.append({'date':today, 'count':word_count[1]})
-                wordCount.frequencyData = json.dumps(frequencyData)
+                wordCount = WordCounts.query.filter_by(word=word).first()
+
+                if bool(re.search(today.strftime("%Y-%m-%d"), wordCount.frequencyData)):
+                # Check for an entry from today already recorded
+                    continue
+                else:
+                # If no record from today, add one
+                    frequencyData = json.loads(wordCount.frequencyData)
+                    frequencyData.append({'date':today.strftime("%Y-%m-%d"), 'count':word_count[1]})
+                    wordCount.frequencyData = json.dumps(frequencyData)
+        except:
+            print(word)
     db.session.commit()
     return
 
+@manager.command
+def batch_word_count():
+    # Find earliest tweet
+    # For all time, in batches of 7 days, count_tweet_words
+    return
 
 @manager.command
 def topSources():

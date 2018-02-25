@@ -87,7 +87,7 @@ body header p{
   max-width:600px;
   line-height:1.5em;
   text-align:center;
-  color:#777;
+  color:#4d4d4d;
   margin:0 auto 20px;
   font-weight:100;
   font-family:'AbeeZee',Helvetica,sans-serif;
@@ -152,7 +152,7 @@ body section > .icon{
   left:50%;
   margin-left:-25px;
 }
-body section > .icon.c1{background-color:#2bb7ca}body section > .icon.c2{background-color:#f05d5e}body section > .icon.c3{background-color:#fed765}body section > .icon.c4{background-color:#966b9d}body section > .icon.c5{background-color:#60ad56}body section > .icon.c6{background-color:#e28411}body section > .icon.c7{background-color:#e76b74}
+body section > .icon.c1{background-color:#003399}body section > .icon.c2{background-color:#f05d5e}body section > .icon.c3{background-color:#fed765}body section > .icon.c4{background-color:#966b9d}body section > .icon.c5{background-color:#60ad56}body section > .icon.c6{background-color:#e28411}body section > .icon.c7{background-color:#e76b74}
 body section > .icon.c8{
   background-color:#83b692
 }
@@ -165,7 +165,29 @@ body section hgroup{
   margin:auto;
   /*margin-bottom:25px;*/
 }
-body section hgroup h2.c1{color:#2bb7ca}body section hgroup h2.c2{color:#f05d5e}body section hgroup h2.c3{color:#fed765}body section hgroup h2.c4{color:#966b9d}body section hgroup h2.c5{color:#60ad56}body section hgroup h2.c6{color:#e28411}body section hgroup h2.c7{color:#e76b74}body section hgroup h2.c8{color:#83b692}body table{width:90%;margin:40px auto;}body table td{text-align:center;}body table td a.icon{font-size:40px;padding:0 8px;position:relative;padding:5px 5px 6px 6px;border-radius:4px;-webkit-transition:0.3s ease-out;-moz-transition:0.3s ease-out;-o-transition:0.3s ease-out;-ms-transition:0.3s ease-out;transition:0.3s ease-out;}@media (max-width:400px){body table td a.icon{font-size:30px}}body table td a.icon.c1{color:#2bb7ca;}body table td a.icon.c1:hover{color:#1a6e79}body table td a.icon.c2{color:#f05d5e;}body table td a.icon.c2:hover{color:#b71112}body table td a.icon.c3{color:#fed765;}body table td a.icon.c3:hover{color:#d49e01}body table td a.icon.c4{color:#966b9d;}body table td a.icon.c4:hover{color:#5b3f5f}body table td a.icon.c5{color:#60ad56;}body table td a.icon.c5:hover{color:#396933}body table td a.icon.c6{color:#e28411;}body table td a.icon.c6:hover{color:#884f0a}body table td a.icon.c7{color:#e76b74;}body table td a.icon.c7:hover{color:#af1c27}body table td a.icon.c8{color:#83b692;}body table td a.icon.c8:hover{color:#467654}body table td a.icon:hover{text-decoration:none}
+body section hgroup h2.c1{font-weight: 600;color:#292929}
+body section hgroup h2.c2{color:#f05d5e}
+body section hgroup h2.c3{color:#fed765}
+body section hgroup h2.c4{color:#966b9d}
+body section hgroup h2.c5{color:#60ad56}
+body section hgroup h2.c6{color:#e28411}
+body section hgroup h2.c7{color:#e76b74}
+body section hgroup h2.c8{color:#83b692}
+body table{width:90%;margin:40px auto;}
+body table td{text-align:center;}
+body table td a.icon{
+  font-size:40px;
+  padding:0 8px;
+  position:relative;
+  padding:5px 5px 6px 6px;
+  border-radius:4px;
+  -webkit-transition:0.3s ease-out;-moz-transition:0.3s ease-out;
+  -o-transition:0.3s ease-out;
+  -ms-transition:0.3s ease-out;
+  transition:0.3s ease-out;}
+@media (max-width:400px){
+  body table td a.icon{font-size:30px}}
+body table td a.icon.c1{color:#2bb7ca;}body table td a.icon.c1:hover{color:#1a6e79}body table td a.icon.c2{color:#f05d5e;}body table td a.icon.c2:hover{color:#b71112}body table td a.icon.c3{color:#fed765;}body table td a.icon.c3:hover{color:#d49e01}body table td a.icon.c4{color:#966b9d;}body table td a.icon.c4:hover{color:#5b3f5f}body table td a.icon.c5{color:#60ad56;}body table td a.icon.c5:hover{color:#396933}body table td a.icon.c6{color:#e28411;}body table td a.icon.c6:hover{color:#884f0a}body table td a.icon.c7{color:#e76b74;}body table td a.icon.c7:hover{color:#af1c27}body table td a.icon.c8{color:#83b692;}body table td a.icon.c8:hover{color:#467654}body table td a.icon:hover{text-decoration:none}
 .item{
   /*font-size:16px;*/
   /*cursor:pointer;*/

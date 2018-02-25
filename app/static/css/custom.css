@@ -6,8 +6,14 @@
   font-size: 60px;
 }
 
+/* Plot styling */
 .dimple-tooltip {
   font-size: 14px !important;
+}
+
+.tick line{
+    opacity: 0.2;
+    stroke-dasharray: 3 3;
 }
 
 .intro-copy {
