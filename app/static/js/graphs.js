@@ -1,6 +1,6 @@
 
 // ----------------------------------------------------------------------
-// SENTIMENT OVER TIME SCATTER PLOT
+// SENTIMENT OVER TIME LINE PLOT
 // ----------------------------------------------------------------------
 var plotSentimentChart = function(sentimentData){
 
@@ -34,8 +34,9 @@ var plotSentimentChart = function(sentimentData){
   // Axis formatting.
   x.timePeriod = d3.time.months;
   x.timeInterval = 3;
-  x.fontSize = 14;
-  y.fontSize = 14;
+  x.fontSize = 16;
+  y.fontSize = 16;
+  y.ticks = 5;
   y.title = "Sentiment Polarity";
 
   onViewport("#sentimentChart", "active", 600, function(el) {
@@ -76,8 +77,9 @@ var plotTimeLangChart = function(timeLangData){
   // Axis formatting.
   x.timePeriod = d3.time.months;
   x.timeInterval = 3;
-  x.fontSize = 14;
-  y.fontSize = 14;
+  x.fontSize = 16;
+  y.fontSize = 16;
+  y.ticks = 5;
   y.title = "Percentage of tweets";
 
   timeLangChart.defaultColors = [
@@ -109,8 +111,9 @@ var plotSourceChart =  function(sourceData){
   var yAxis = sourceChart.addCategoryAxis("y", "source");
   yAxis.addOrderRule("percentage");
   var mySeries = sourceChart.addSeries("source", dimple.plot.bar);
-  xAxis.fontSize = 14;
-  yAxis.fontSize = 14;
+  xAxis.fontSize = 16;
+  yAxis.fontSize = 16;
+  xAxis.ticks = 5;
   yAxis.title = '';
   xAxis.title = 'Percentage of Tweets Sampled'
 
@@ -179,7 +182,7 @@ var plotStringMatchChart =  function(stringMatchData){
   // custom tooltips
   mySeries.getTooltipText = function (e) {
     return [
-      e.aggField[0]
+      e.aggField[0].charAt(0).toUpperCase() + e.aggField[0].slice(1)
     ];
   };
 
@@ -194,8 +197,9 @@ var plotStringMatchChart =  function(stringMatchData){
   // Axis formatting.
   x.timePeriod = d3.time.months;
   x.timeInterval = 3;
-  x.fontSize = 14;
-  y.fontSize = 14;
+  x.fontSize = 16;
+  y.fontSize = 16;
+  y.ticks = 5;
   y.title = "Percentage of tweets";
 
   //Create Y axis label
@@ -251,8 +255,9 @@ var plotPopularTweeterChart = function(popularTweeterData){
   // Axis formatting.
   x.timePeriod = d3.time.months;
   x.timeInterval = 3;
-  x.fontSize = 14;
-  y.fontSize = 14;
+  x.fontSize = 16;
+  y.fontSize = 16;
+  y.ticks = 5;
   y.title = "Number of tweets & retweets";
 
   onViewport("#popularTweeterChart", "active", 600, function(el) {

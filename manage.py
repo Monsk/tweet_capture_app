@@ -48,7 +48,7 @@ def saveComputedData(name, data):
     else:
         computedData = ComputedData.query.filter_by(dataTitle=name).first()
         computedData.jsonData = data
-        computedData.updated_at = datetime.datetime.now()
+        computedData.updated_at = datetime.now()
         db.session.commit()
     return
 
