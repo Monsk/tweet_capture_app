@@ -15,8 +15,9 @@ from textblob import TextBlob
 from collections import Counter
 import re, string, json
 
+import time
 import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -72,9 +73,7 @@ def compute_sentiment_scores():
         db.session.commit()
 
 
-@manager.command
-def count_tweet_words(today = None, day_scope = None):
-
+def get_scoped_tweets(today, day_scope):
     if day_scope is None:
         if today is None:
             today = datetime.datetime.now()
@@ -84,10 +83,13 @@ def count_tweet_words(today = None, day_scope = None):
     else:
         print("Insufficient information to scope tweets")
         return
+    return scoped_tweets
 
+
+def count_words_in_tweets(tweets):
     combined_string = ''
 
-    for tweet in scoped_tweets:
+    for tweet in tweets:
         # select retweet_text if the text is a retweet
         if tweet.retweet_text is None:
             combined_string = combined_string + tweet.remove_url(is_retweet = False)
@@ -97,16 +99,25 @@ def count_tweet_words(today = None, day_scope = None):
     # remove all punctuation and convert to lower case
     combined_string = re.sub('([^\s\w]|_)+', '', combined_string.lower())
     word_counts = sorted(Counter(combined_string.split()).items())
-    print(len(word_counts))
+    return word_counts
 
-    existing_words = db.session.query(WordCounts.word)
-    n=0
+
+@manager.command
+def count_tweet_words(today = None, day_scope = None):
+
+    scoped_tweets = get_scoped_tweets(today, day_scope)
+    word_counts = count_words_in_tweets(scoped_tweets)
+
+    # Place all the words ever previously seen in a list
+    existing_words = [r.word for r in db.session.query(WordCounts.word)]
+
+    loop_start = time.time()
     for word_count in word_counts:
         word = word_count[0]
 
         try:
             # if the word does not exist in the table, add it
-            if (db.session.query(WordCounts.word).filter_by(word=word).scalar() is None):
+            if word not in existing_words:
                 new_word = WordCounts(
                     word = word,
                     frequencyData = json.dumps([{'date':today.strftime("%Y-%m-%d"), 'count':word_count[1]}])
@@ -126,20 +137,38 @@ def count_tweet_words(today = None, day_scope = None):
                     wordCount.frequencyData = json.dumps(frequencyData)
         except:
             print(word)
+    loop_time = time.time() - loop_start
+    print('Loop time: ' + str(loop_time))
     db.session.commit()
     return
 
 @manager.command
 def batch_word_count():
+    start = time.time()
     # Find earliest tweet
     first_tweet = db.session.query(Tweet).order_by(Tweet.occurred_at.asc()).first()
     first_tweet_time = first_tweet.occurred_at
+
+    # A hacky way to find all the weeks that have been counted already
+    example_wordCount = WordCounts.query.filter_by(word='a').first()
+    frequencyData = json.loads(example_wordCount.frequencyData)
+    dates = [datetime.strptime(i['date'], '%Y-%m-%d') for i in frequencyData]
+    f = lambda date: (date - timedelta(days=date.weekday())).date()
+    week_dates = map(f, dates)
+
     # For all time, in batches of 7 days, count_tweet_words
     date = first_tweet_time
-    while date < datetime.datetime.now():
-        count_tweet_words(today = date, day_scope = 7)
+    while date < datetime.now():
+        # if no entry for present week count tweets
+        if f(date) not in week_dates:
+            count_tweet_words(today = date, day_scope = 7)
+        else:
+            print('week already recorded')
         print(date)
         date = date + timedelta(days = 7)
+
+    elapsed = time.time() - start
+    print('Elapsed time: ' + str(elapsed))
     return
 
 @manager.command
