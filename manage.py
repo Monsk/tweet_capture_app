@@ -76,7 +76,7 @@ def compute_sentiment_scores():
 def get_scoped_tweets(today, day_scope):
     if day_scope is None:
         if today is None:
-            today = datetime.datetime.now()
+            today = datetime.now()
         scoped_tweets = db.session.query(Tweet).filter( Tweet.recorded_at > today - timedelta(days=1) )
     elif day_scope is not None and today is not None:
         scoped_tweets = db.session.query(Tweet).filter(and_(Tweet.recorded_at > today, Tweet.recorded_at < today + timedelta(days=day_scope)))
