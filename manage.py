@@ -108,6 +108,7 @@ def count_tweet_words(today = None, day_scope = 7):
 
     scoped_tweets = get_scoped_tweets(datetime.strptime(today, '%Y-%m-%d'), day_scope)
     word_counts = count_words_in_tweets(scoped_tweets)
+    print(str(len(word_counts)) + " unique words")
 
     # Place all the words ever previously seen in a list
     existing_words = [r.word for r in db.session.query(WordCounts.word)]
@@ -159,23 +160,27 @@ def batch_word_count(start_date=None):
         start_date = get_first_tweet_date()
 
     # A hacky way to find all the weeks that have been counted already
-    example_wordCount = WordCounts.query.filter_by(word='a').first()
-    frequencyData = json.loads(example_wordCount.frequencyData)
-    dates = [datetime.strptime(i['date'], '%Y-%m-%d') for i in frequencyData]
     f = lambda date: (date - timedelta(days=date.weekday())).date()
-    week_dates = map(f, dates)
+
+    example_wordCount = WordCounts.query.filter_by(word='a').first()
+    if example_wordCount is not None:
+        frequencyData = json.loads(example_wordCount.frequencyData)
+        dates = [datetime.strptime(i['date'], '%Y-%m-%d') for i in frequencyData]
+        week_dates = map(f, dates)
+    else:
+        week_dates = []
 
     # For all time, in batches of 7 days, count_tweet_words
-    date = start_date
-    while date < datetime.now():
-        # if no entry for present week count tweets
-        # if f(date) not in week_dates:
-        bash_command = "heroku run python manage.py count_tweet_words --today=" + str(f(date))
-        subprocess.call(bash_command, shell=True)
-            # count_tweet_words(today = date, day_scope = 7)
-        # else:
-        #     print('week already recorded')
+    date = f(start_date)
+    while date < datetime.now().date():
         print(date)
+        # if no entry for present week count tweets
+        if date not in week_dates:
+            bash_command = "heroku run python manage.py count_tweet_words --today=" + str(date)
+            subprocess.call(bash_command, shell=True)
+            # count_tweet_words(today = date, day_scope = 7)
+        else:
+            print('week already recorded')
         date = date + timedelta(days = 7)
 
     elapsed = time.time() - start
