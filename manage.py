@@ -5,6 +5,7 @@ from sqlalchemy.orm import load_only
 from sqlalchemy import and_
 from flask_script import Manager
 from flask.ext.migrate import Migrate, MigrateCommand
+import subprocess
 
 from app import app, db
 from app.models import ComputedData, Tweet, WordCounts
@@ -103,9 +104,9 @@ def count_words_in_tweets(tweets):
 
 
 @manager.command
-def count_tweet_words(today = None, day_scope = None):
+def count_tweet_words(today = None, day_scope = 7):
 
-    scoped_tweets = get_scoped_tweets(today, day_scope)
+    scoped_tweets = get_scoped_tweets(datetime.strptime(today, '%Y-%m-%d'), day_scope)
     word_counts = count_words_in_tweets(scoped_tweets)
 
     # Place all the words ever previously seen in a list
@@ -120,34 +121,42 @@ def count_tweet_words(today = None, day_scope = None):
             if word not in existing_words:
                 new_word = WordCounts(
                     word = word,
-                    frequencyData = json.dumps([{'date':today.strftime("%Y-%m-%d"), 'count':word_count[1]}])
+                    frequencyData = json.dumps([{'date':today, 'count':word_count[1]}])
                 )
                 db.session.add(new_word)
             # else, update the entry with the new data
             else:
                 wordCount = WordCounts.query.filter_by(word=word).first()
 
-                if bool(re.search(today.strftime("%Y-%m-%d"), wordCount.frequencyData)):
+                if bool(re.search(today, wordCount.frequencyData)):
                 # Check for an entry from today already recorded
                     continue
                 else:
                 # If no record from today, add one
                     frequencyData = json.loads(wordCount.frequencyData)
-                    frequencyData.append({'date':today.strftime("%Y-%m-%d"), 'count':word_count[1]})
+                    frequencyData.append({'date':today, 'count':word_count[1]})
                     wordCount.frequencyData = json.dumps(frequencyData)
-        except:
-            print(word)
+        except Exception, e:
+            print(e)
     loop_time = time.time() - loop_start
     print('Loop time: ' + str(loop_time))
     db.session.commit()
     return
 
 @manager.command
-def batch_word_count():
-    start = time.time()
+def get_first_tweet_date():
     # Find earliest tweet
     first_tweet = db.session.query(Tweet).order_by(Tweet.occurred_at.asc()).first()
     first_tweet_time = first_tweet.occurred_at
+    return first_tweet_time
+
+
+@manager.command
+def batch_word_count(start_date=None):
+    start = time.time()
+
+    if start_date is None:
+        start_date = get_first_tweet_date()
 
     # A hacky way to find all the weeks that have been counted already
     example_wordCount = WordCounts.query.filter_by(word='a').first()
@@ -157,13 +166,15 @@ def batch_word_count():
     week_dates = map(f, dates)
 
     # For all time, in batches of 7 days, count_tweet_words
-    date = first_tweet_time
+    date = start_date
     while date < datetime.now():
         # if no entry for present week count tweets
-        if f(date) not in week_dates:
-            count_tweet_words(today = date, day_scope = 7)
-        else:
-            print('week already recorded')
+        # if f(date) not in week_dates:
+        bash_command = "heroku run python manage.py count_tweet_words --today=" + str(f(date))
+        subprocess.call(bash_command, shell=True)
+            # count_tweet_words(today = date, day_scope = 7)
+        # else:
+        #     print('week already recorded')
         print(date)
         date = date + timedelta(days = 7)
 
